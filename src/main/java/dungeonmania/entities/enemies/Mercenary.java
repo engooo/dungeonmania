@@ -12,6 +12,11 @@ import dungeonmania.entities.Player;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.potions.InvincibilityPotion;
 import dungeonmania.entities.collectables.potions.InvisibilityPotion;
+import dungeonmania.entities.movement.AlliedMercenaryMovementStrategy;
+import dungeonmania.entities.movement.FollowHostileMovementStrategy;
+import dungeonmania.entities.movement.InvincibilityMovementStrategy;
+import dungeonmania.entities.movement.NoMovementStrategy;
+import dungeonmania.entities.movement.RandomMovementStrategy;
 import dungeonmania.map.GameMap;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -32,7 +37,7 @@ public class Mercenary extends Enemy implements Interactable {
 
     public Mercenary(Position position, double health, double attack, int bribeAmount, int bribeRadius,
             double allyAttack, double allyDefence) {
-        super(position, health, attack);
+        super(position, health, attack, null);
         this.bribeAmount = bribeAmount;
         this.bribeRadius = bribeRadius;
         this.allyAttack = allyAttack;
@@ -41,6 +46,10 @@ public class Mercenary extends Enemy implements Interactable {
 
     public boolean isAllied() {
         return allied;
+    }
+
+    public boolean isAdjacentToPlayer() {
+        return isAdjacentToPlayer;
     }
 
     @Override
@@ -52,6 +61,7 @@ public class Mercenary extends Enemy implements Interactable {
 
     /**
      * check whether the current merc can be bribed
+     * 
      * @param player
      * @return
      */
@@ -85,6 +95,7 @@ public class Mercenary extends Enemy implements Interactable {
         if (allied) {
             nextPos = isAdjacentToPlayer ? player.getPreviousDistinctPosition()
                     : map.dijkstraPathFind(getPosition(), player.getPosition(), this);
+            // keep this line
             if (!isAdjacentToPlayer && Position.isAdjacent(player.getPosition(), nextPos))
                 isAdjacentToPlayer = true;
         } else if (map.getPlayer().getEffectivePotion() instanceof InvisibilityPotion) {
@@ -134,6 +145,19 @@ public class Mercenary extends Enemy implements Interactable {
         map.moveTo(this, nextPos);
     }
 
+    // @Override
+    // public void move(Game game) {
+    //     GameMap map = game.getMap();
+    //     Player player = game.getPlayer();
+
+    //     Position nextPos = getMovementStrategy().getNewPosition(this, game, getPosition());
+    //     if (!isAdjacentToPlayer && Position.isAdjacent(player.getPosition(), nextPos)) {
+    //         isAdjacentToPlayer = true;
+    //     }
+
+    //     map.moveTo(this, nextPos);
+    // }
+
     @Override
     public boolean isInteractable(Player player) {
         return !allied && canBeBribed(player);
@@ -144,5 +168,29 @@ public class Mercenary extends Enemy implements Interactable {
         if (!allied)
             return super.getBattleStatistics();
         return new BattleStatistics(0, allyAttack, allyDefence, 1, 1);
+    }
+
+    @Override
+    protected void determineMovementStrategy(Game game) {
+        GameMap map = game.getMap();
+        if (allied) {
+            // Allied Mercenary Movement
+            this.setMovementStrategy(new AlliedMercenaryMovementStrategy());
+
+        } else if (map.getPlayer().getEffectivePotion() instanceof InvisibilityPotion) {
+            // Random Movement
+            this.setMovementStrategy(new RandomMovementStrategy());
+
+        } else if (map.getPlayer().getEffectivePotion() instanceof InvincibilityPotion) {
+            // Invincibility Potion Movement
+            this.setMovementStrategy(new InvincibilityMovementStrategy());
+
+        } else {
+            // Follow hostile
+            this.setMovementStrategy(new FollowHostileMovementStrategy());
+        }
+
+        // No Movement Strategy
+        this.setMovementStrategy(new NoMovementStrategy());
     }
 }

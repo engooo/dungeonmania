@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import dungeonmania.Game;
 import dungeonmania.entities.collectables.potions.InvincibilityPotion;
+import dungeonmania.entities.movement.InvincibilityMovementStrategy;
+import dungeonmania.entities.movement.RandomMovementStrategy;
 import dungeonmania.map.GameMap;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -16,7 +18,7 @@ public class ZombieToast extends Enemy {
     private Random randGen = new Random();
 
     public ZombieToast(Position position, double health, double attack) {
-        super(position, health, attack);
+        super(position, health, attack, null);
     }
 
     @Override
@@ -62,6 +64,24 @@ public class ZombieToast extends Enemy {
         }
         game.getMap().moveTo(this, nextPos);
 
+    }
+
+    // @Override
+    // public void move(Game game) {
+    //     Position nextPos = getMovementStrategy().getNewPosition(this, game, getPosition());
+    //     game.getMap().moveTo(this, nextPos);
+    // }
+
+    protected void determineMovementStrategy(Game game) {
+        GameMap map = game.getMap();
+        if (map.getPlayer().getEffectivePotion() instanceof InvincibilityPotion) {
+            // Invincibility Potion Movement
+            setMovementStrategy(new InvincibilityMovementStrategy());
+
+        } else {
+           // Random Movement
+           setMovementStrategy(new RandomMovementStrategy());
+        }
     }
 
 }

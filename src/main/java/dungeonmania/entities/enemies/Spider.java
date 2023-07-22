@@ -5,6 +5,7 @@ import java.util.List;
 import dungeonmania.Game;
 import dungeonmania.entities.Boulder;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.movement.SpiderMovementStrategy;
 import dungeonmania.util.Position;
 
 public class Spider extends Enemy {
@@ -17,12 +18,12 @@ public class Spider extends Enemy {
     public static final double DEFAULT_HEALTH = 10;
 
     public Spider(Position position, double health, double attack) {
-        super(position.asLayer(Entity.DOOR_LAYER + 1), health, attack);
+        super(position.asLayer(Entity.DOOR_LAYER + 1), health, attack, null);
         /**
          * Establish spider movement trajectory Spider moves as follows:
-         *  8 1 2       10/12  1/9  2/8
-         *  7 S 3       11     S    3/7
-         *  6 5 4       B      5    4/6
+         * 8 1 2 10/12 1/9 2/8
+         * 7 S 3 11 S 3/7
+         * 6 5 4 B 5 4/6
          */
         movementTrajectory = position.getAdjacentPositions();
         nextPositionElement = 1;
@@ -47,6 +48,8 @@ public class Spider extends Enemy {
     public void move(Game game) {
         Position nextPos = movementTrajectory.get(nextPositionElement);
         List<Entity> entities = game.getMap().getEntities(nextPos);
+        // The first two checks are redundant. anyMatch will return false if it
+        // is null or size > 0.
         if (entities != null && entities.size() > 0 && entities.stream().anyMatch(e -> e instanceof Boulder)) {
             forward = !forward;
             updateNextPosition();
@@ -59,5 +62,17 @@ public class Spider extends Enemy {
             game.getMap().moveTo(this, nextPos);
             updateNextPosition();
         }
+    }
+
+    // @Override
+    // public void move(Game game) {
+    //     // Ideally we have a function that looks like this but its kinda weird for spider.
+    //     Position nextPos = getMovementStrategy().getNewPosition(this, game, getPosition());
+    //     game.getMap().moveTo(this, nextPos);
+    // }
+
+    protected void determineMovementStrategy(Game game) {
+        // Spider Movement Strategy
+        this.setMovementStrategy(new SpiderMovementStrategy());
     }
 }
