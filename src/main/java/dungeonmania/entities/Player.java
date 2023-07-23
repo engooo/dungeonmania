@@ -183,14 +183,4 @@ public class Player extends Entity implements Battleable {
   public BattleStatistics applyBuff(BattleStatistics origin) {
     return state.applyBuff(origin);
   }
-
-  @Override
-  public void onMovedAway(GameMap map, Entity entity) {
-    return;
-  }
-
-  @Override
-  public void onDestroy(GameMap gameMap) {
-    return;
-  }
 }
