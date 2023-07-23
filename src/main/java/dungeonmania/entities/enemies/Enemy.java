@@ -5,16 +5,20 @@ import dungeonmania.battles.BattleStatistics;
 import dungeonmania.battles.Battleable;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
+import dungeonmania.entities.movement.MovementStrategy;
 import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
 
 public abstract class Enemy extends Entity implements Battleable {
     private BattleStatistics battleStatistics;
+    private MovementStrategy movementStrategy;
 
-    public Enemy(Position position, double health, double attack) {
+
+    public Enemy(Position position, double health, double attack, MovementStrategy movement) {
         super(position.asLayer(Entity.CHARACTER_LAYER));
-        battleStatistics = new BattleStatistics(health, attack, 0, BattleStatistics.DEFAULT_DAMAGE_MAGNIFIER,
+        this.battleStatistics = new BattleStatistics(health, attack, 0, BattleStatistics.DEFAULT_DAMAGE_MAGNIFIER,
                 BattleStatistics.DEFAULT_ENEMY_DAMAGE_REDUCER);
+        this.movementStrategy = movement;
     }
 
     @Override
@@ -47,4 +51,14 @@ public abstract class Enemy extends Entity implements Battleable {
     }
 
     public abstract void move(Game game);
+
+    public void setMovementStrategy(MovementStrategy movementStrategy) {
+        this.movementStrategy = movementStrategy;
+    }
+
+    public MovementStrategy getMovementStrategy() {
+        return movementStrategy;
+    }
+
+    protected abstract void determineMovementStrategy(Game game);
 }
