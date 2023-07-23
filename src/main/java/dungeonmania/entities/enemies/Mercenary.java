@@ -55,7 +55,7 @@ public class Mercenary extends Enemy implements Interactable {
 
     /**
      * check whether the current merc can be bribed
-     * 
+     *
      * @param player
      * @return
      */
@@ -87,7 +87,7 @@ public class Mercenary extends Enemy implements Interactable {
 
         GameMap map = game.getMap();
         Player player = game.getPlayer();
-        
+
         Position nextPos = getMovementStrategy().getNewPosition(this, game, getPosition());
         if (!isAdjacentToPlayer && Position.isAdjacent(player.getPosition(), nextPos)) {
             isAdjacentToPlayer = true;

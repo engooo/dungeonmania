@@ -11,7 +11,7 @@ public class InvincibilityMovementStrategy implements MovementStrategy {
     public Position getNewPosition(Entity entity, Game game, Position position) {
         GameMap map = game.getMap();
         Position nextPos;
-        
+
         Position plrDiff = Position.calculatePositionBetween(map.getPlayer().getPosition(), position);
 
         Position moveX = (plrDiff.getX() >= 0) ? Position.translateBy(position, Direction.RIGHT)
