@@ -13,8 +13,8 @@ import dungeonmania.entities.inventory.Inventory;
 import dungeonmania.entities.inventory.InventoryItem;
 
 public class Bow extends Buildable {
+    public static final List<Recipe> RECIPES = buildRecipes();
     private int durability;
-    public static final List<Recipe> recipes = buildRecipes();
 
     public Bow(int durability) {
         super(null);
@@ -41,7 +41,7 @@ public class Bow extends Buildable {
 
     @Override
     public List<Recipe> getRecipes() {
-        return recipes;
+        return RECIPES;
     }
 
     private static List<Recipe> buildRecipes() {
@@ -49,14 +49,14 @@ public class Bow extends Buildable {
 
         Map<Class<? extends InventoryItem>, Integer> recipe = new HashMap<>();
         recipe.put(Wood.class, 1);
-        recipe.put(Arrow.class, 3);        
+        recipe.put(Arrow.class, 3);
         recipes.add(new Recipe(recipe));
 
         return recipes;
     }
 
     public static boolean canBuild(Inventory inventory) {
-        for (Recipe recipe : recipes) {
+        for (Recipe recipe : RECIPES) {
             if (recipe.canBuild(inventory)) {
                 return true;
             }
