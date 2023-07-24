@@ -1,5 +1,7 @@
 package dungeonmania.entities.buildables;
 
+import java.util.List;
+
 import dungeonmania.entities.BattleItem;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.inventory.InventoryItem;
@@ -9,4 +11,6 @@ public abstract class Buildable extends Entity implements InventoryItem, BattleI
     public Buildable(Position position) {
         super(position);
     }
+
+    public abstract List<Recipe> getRecipes();
 }

@@ -2,6 +2,7 @@ package dungeonmania.entities;
 
 import dungeonmania.Game;
 import dungeonmania.entities.buildables.Bow;
+import dungeonmania.entities.buildables.Buildable;
 import dungeonmania.entities.buildables.Shield;
 import dungeonmania.entities.collectables.*;
 import dungeonmania.entities.collectables.Sword;
@@ -28,6 +29,17 @@ public class EntityFactory {
 
     public Entity createEntity(JSONObject jsonEntity) {
         return constructEntity(jsonEntity, config);
+    }
+
+    public Buildable createBuildable(String type) {
+        switch (type) {
+            case "bow":
+                return buildBow();
+            case "shield":
+                return buildShield();
+            default:
+                return null;
+        }
     }
 
     public void spawnSpider(Game game) {
