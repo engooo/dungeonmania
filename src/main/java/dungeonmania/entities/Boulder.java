@@ -2,10 +2,11 @@ package dungeonmania.entities;
 
 import dungeonmania.entities.enemies.Spider;
 import dungeonmania.map.GameMap;
+import dungeonmania.movementListeners.CanOverlap;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-public class Boulder extends Entity {
+public class Boulder extends Entity implements CanOverlap {
 
     public Boulder(Position position) {
         super(position.asLayer(Entity.CHARACTER_LAYER));
@@ -33,13 +34,4 @@ public class Boulder extends Entity {
         return true;
     }
 
-    @Override
-    public void onMovedAway(GameMap map, Entity entity) {
-        return;
-    }
-
-    @Override
-    public void onDestroy(GameMap gameMap) {
-        return;
-    }
 }
