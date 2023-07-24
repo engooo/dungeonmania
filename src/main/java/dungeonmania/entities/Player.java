@@ -87,7 +87,7 @@ public class Player extends Entity implements Battleable, CanOverlap {
   }
 
   public boolean build(String entity, EntityFactory factory) {
-    InventoryItem item = inventory.checkBuildCriteria(this, true, entity.equals("shield"), factory);
+    InventoryItem item = inventory.checkBuildCriteria(entity, factory);
     if (item == null)
       return false;
     return inventory.add(item);
@@ -123,7 +123,7 @@ public class Player extends Entity implements Battleable, CanOverlap {
       collectedTreasureCount++;
 
     if (item instanceof InventoryItem) {
-        return inventory.add((InventoryItem) item);
+      return inventory.add((InventoryItem) item);
     }
     return false;
   }

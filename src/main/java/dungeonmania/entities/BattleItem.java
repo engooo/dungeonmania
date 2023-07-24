@@ -7,7 +7,9 @@ import dungeonmania.battles.BattleStatistics;
  * Item has buff in battles
  */
 public interface BattleItem {
-    public BattleStatistics applyBuff(BattleStatistics origin);
-    public void use(Game game);
-    public int getDurability();
+  public BattleStatistics applyBuff(BattleStatistics origin);
+
+  public void use(Game game);
+
+  public int getDurability();
 }

@@ -7,13 +7,11 @@ import java.util.stream.Collectors;
 import dungeonmania.entities.BattleItem;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.EntityFactory;
-import dungeonmania.entities.Player;
 import dungeonmania.entities.buildables.Bow;
-import dungeonmania.entities.collectables.Arrow;
-import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.buildables.Buildable;
+import dungeonmania.entities.buildables.Recipe;
+import dungeonmania.entities.buildables.Shield;
 import dungeonmania.entities.collectables.Sword;
-import dungeonmania.entities.collectables.Treasure;
-import dungeonmania.entities.collectables.Wood;
 
 public class Inventory {
     private List<InventoryItem> items = new ArrayList<>();
@@ -28,49 +26,30 @@ public class Inventory {
     }
 
     public List<String> getBuildables() {
-
-        int wood = count(Wood.class);
-        int arrows = count(Arrow.class);
-        int treasure = count(Treasure.class);
-        int keys = count(Key.class);
+        // This could probably be improved becuase its still hard coded for each entity
+        // type, but it's better than before.
         List<String> result = new ArrayList<>();
 
-        if (wood >= 1 && arrows >= 3) {
+        if (Bow.canBuild(this)) {
             result.add("bow");
         }
-        if (wood >= 2 && (treasure >= 1 || keys >= 1)) {
+        if (Shield.canBuild(this)) {
             result.add("shield");
         }
         return result;
     }
 
-    public InventoryItem checkBuildCriteria(Player p, boolean remove, boolean forceShield, EntityFactory factory) {
+    public InventoryItem checkBuildCriteria(String buildable, EntityFactory factory) {
+        Buildable item = factory.createBuildable(buildable);
+        List<Recipe> recipes = item.getRecipes();
 
-        List<Wood> wood = getEntities(Wood.class);
-        List<Arrow> arrows = getEntities(Arrow.class);
-        List<Treasure> treasure = getEntities(Treasure.class);
-        List<Key> keys = getEntities(Key.class);
-
-        if (wood.size() >= 1 && arrows.size() >= 3 && !forceShield) {
-            if (remove) {
-                items.remove(wood.get(0));
-                items.remove(arrows.get(0));
-                items.remove(arrows.get(1));
-                items.remove(arrows.get(2));
+        // Check each recipe and determine if the player has can build it. If it can be
+        // built, remove items from the players inventory and return the built entity.
+        for (Recipe recipe : recipes) {
+            if (recipe.canBuild(this)) {
+                recipe.removeRecipeItems(this);
+                return item;
             }
-            return factory.buildBow();
-
-        } else if (wood.size() >= 2 && (treasure.size() >= 1 || keys.size() >= 1)) {
-            if (remove) {
-                items.remove(wood.get(0));
-                items.remove(wood.get(1));
-                if (treasure.size() >= 1) {
-                    items.remove(treasure.get(0));
-                } else {
-                    items.remove(keys.get(0));
-                }
-            }
-            return factory.buildShield();
         }
         return null;
     }
