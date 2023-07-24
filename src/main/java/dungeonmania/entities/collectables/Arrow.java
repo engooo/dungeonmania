@@ -4,9 +4,10 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.inventory.InventoryItem;
 import dungeonmania.map.GameMap;
+import dungeonmania.movementListeners.CanOverlap;
 import dungeonmania.util.Position;
 
-public class Arrow extends Entity implements InventoryItem {
+public class Arrow extends Entity implements InventoryItem, CanOverlap {
     public Arrow(Position position) {
         super(position);
     }

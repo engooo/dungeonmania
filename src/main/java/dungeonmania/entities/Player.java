@@ -18,10 +18,11 @@ import dungeonmania.entities.playerState.InvincibleState;
 import dungeonmania.entities.playerState.InvisibleState;
 import dungeonmania.entities.playerState.PlayerState;
 import dungeonmania.map.GameMap;
+import dungeonmania.movementListeners.CanOverlap;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-public class Player extends Entity implements Battleable {
+public class Player extends Entity implements Battleable, CanOverlap {
   public static final double DEFAULT_ATTACK = 5.0;
   public static final double DEFAULT_HEALTH = 5.0;
   private BattleStatistics battleStatistics;

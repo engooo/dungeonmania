@@ -5,9 +5,10 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.Interactable;
 import dungeonmania.entities.Player;
 import dungeonmania.map.GameMap;
+import dungeonmania.movementListeners.CanDestroy;
 import dungeonmania.util.Position;
 
-public class ZombieToastSpawner extends Entity implements Interactable {
+public class ZombieToastSpawner extends Entity implements Interactable, CanDestroy {
     public static final int DEFAULT_SPAWN_INTERVAL = 0;
 
     public ZombieToastSpawner(Position position, int spawnInterval) {

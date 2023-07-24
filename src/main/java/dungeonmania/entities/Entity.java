@@ -46,19 +46,6 @@ public abstract class Entity {
         this.position = Position.translateBy(this.position, offset);
     }
 
-
-    public void onOverlap(GameMap map, Entity entity) {
-        return;
-    }
-
-    public void onMovedAway(GameMap map, Entity entity) {
-        return;
-    }
-
-    public void onDestroy(GameMap gameMap) {
-        return;
-    }
-
     public Position getPosition() {
         return position;
     }

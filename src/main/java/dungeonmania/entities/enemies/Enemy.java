@@ -7,9 +7,11 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.movement.MovementStrategy;
 import dungeonmania.map.GameMap;
+import dungeonmania.movementListeners.CanDestroy;
+import dungeonmania.movementListeners.CanOverlap;
 import dungeonmania.util.Position;
 
-public abstract class Enemy extends Entity implements Battleable {
+public abstract class Enemy extends Entity implements Battleable, CanDestroy, CanOverlap {
     private BattleStatistics battleStatistics;
     private MovementStrategy movementStrategy;
 

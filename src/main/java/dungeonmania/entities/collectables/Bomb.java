@@ -11,8 +11,9 @@ import dungeonmania.entities.Player;
 import dungeonmania.entities.Switch;
 import dungeonmania.entities.inventory.InventoryItem;
 import dungeonmania.map.GameMap;
+import dungeonmania.movementListeners.CanOverlap;
 
-public class Bomb extends Entity implements InventoryItem {
+public class Bomb extends Entity implements InventoryItem, CanOverlap {
     public enum State {
         SPAWNED, INVENTORY, PLACED
     }

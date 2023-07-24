@@ -5,9 +5,11 @@ import java.util.List;
 
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.map.GameMap;
+import dungeonmania.movementListeners.CanMovedAway;
+import dungeonmania.movementListeners.CanOverlap;
 import dungeonmania.util.Position;
 
-public class Switch extends Entity {
+public class Switch extends Entity implements CanOverlap, CanMovedAway {
     private boolean activated;
     private List<Bomb> bombs = new ArrayList<>();
 

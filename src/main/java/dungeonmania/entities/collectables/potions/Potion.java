@@ -7,9 +7,10 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.inventory.InventoryItem;
 import dungeonmania.map.GameMap;
+import dungeonmania.movementListeners.CanOverlap;
 import dungeonmania.util.Position;
 
-public abstract class Potion extends Entity implements InventoryItem, BattleItem {
+public abstract class Potion extends Entity implements InventoryItem, BattleItem, CanOverlap {
     private int duration;
 
     public Potion(Position position, int duration) {
