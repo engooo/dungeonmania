@@ -1,57 +1,118 @@
-package dungeonmania.mvp;
+package dungeonmania.task2;
 
 import dungeonmania.DungeonManiaController;
+import dungeonmania.mvp.TestUtils;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BasicGoalsTest {
-	@Test
-	@DisplayName("Test achieving an enemy goal with single zombie and no spawner")
-	public void oneEnemy() {
-		DungeonManiaController dmc;
-		dmc = new DungeonManiaController();
-		DungeonResponse res = dmc.newGame("d_task2Test_oneEnemy", "c_task2Test_oneEnemy");
+public class MicroevolutionTest {
+  @Test
+  @DisplayName("Test achieving an enemy goal with single zombie and no spawner")
+  public void oneEnemy() {
+    DungeonManiaController dmc;
+    dmc = new DungeonManiaController();
+    DungeonResponse res = dmc.newGame("d_task2Test_oneEnemy", "c_task2Test_oneEnemy");
 
-	}
+    // move player to right to pickup sword
+    res = dmc.tick(Direction.RIGHT);
 
-	@Test
-	@DisplayName("Test achieving an enemy goal with single zombie and spawner")
-	public void oneEnemyAndSpawner() {
-		DungeonManiaController dmc;
-		dmc = new DungeonManiaController();
-		DungeonResponse res = dmc.newGame("d_task2Test_oneEnemyAndSpawner", "c_task2Test_oneEnemyAndSpawner");
+    // assert goal not met
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
 
-	}
+    // move player to kill zombie
+    res = dmc.tick(Direction.RIGHT);
+    // move right twice as zombie position is not certain
+    res = dmc.tick(Direction.RIGHT);
 
-	@Test
-	@DisplayName("Test multiple enemies destroy goal with multiple spawners")
-	public void multipleEnemyAndSpawner() {
-		DungeonManiaController dmc;
-		dmc = new DungeonManiaController();
-		DungeonResponse res = dmc.newGame("d_c_task2Test_multipleEnemyAndSpawner", "c_c_task2Test_multipleEnemyAndSpawner");
+    // assert goal met
+    assertEquals("", TestUtils.getGoals(res));
+  }
 
-	}
+  @Test
+  @DisplayName("Test achieving an enemy goal with single zombie and spawner")
+  public void oneEnemyAndSpawner() {
+    DungeonManiaController dmc;
+    dmc = new DungeonManiaController();
+    DungeonResponse res = dmc.newGame("d_task2Test_oneEnemyAndSpawner", "c_task2Test_oneEnemyAndSpawner");
 
-	@Test
-	@DisplayName("Test achieving enemy goal with bomb")
-	public void bombDestroyEnemy() {
-		DungeonManiaController dmc;
-		dmc = new DungeonManiaController();
-		DungeonResponse res = dmc.newGame("d_task2Test_bombDestroyEnemy", "c_task2Test_bombDestroyEnemy");
+    // move player to right to pickup sword
+    res = dmc.tick(Direction.RIGHT);
 
-	}
+    // assert goal not met
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
 
-	@Test
-	@DisplayName("Test achieving enemy goal within a complex goal")
-	public void enemyComplexGoal() {
-		DungeonManiaController dmc;
-		dmc = new DungeonManiaController();
-		DungeonResponse res = dmc.newGame("d_task2Test_enemyComplexGoal", "c_task2Test_enemyComplexGoal");
+    // move player to kill zombie
+    res = dmc.tick(Direction.RIGHT);
 
-	}
+    // move right twice as zombie position is not certain
+    res = dmc.tick(Direction.RIGHT);
+
+    // assert goal still not met
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
+
+    // moving right again to destroy the spawner
+    res = dmc.tick(Direction.RIGHT);
+
+    // assert goal met
+    assertEquals("", TestUtils.getGoals(res));
+  }
+
+  @Test
+  @DisplayName("Test multiple enemies destroy goal with multiple spawners")
+  public void multipleEnemyAndSpawner() {
+    DungeonManiaController dmc;
+    dmc = new DungeonManiaController();
+    DungeonResponse res = dmc.newGame("d_task2Test_multipleEnemyAndSpawner", "c_task2Test_multipleEnemyAndSpawner");
+    // goal is only two zombies, but kill three in this test for the edge case
+
+    // move player to right to pickup sword
+    res = dmc.tick(Direction.RIGHT);
+
+    // move player to kill first zombie
+    res = dmc.tick(Direction.RIGHT);
+    res = dmc.tick(Direction.RIGHT);
+
+    // assert goal not met
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
+
+    // move player to kill second zombie
+    res = dmc.tick(Direction.RIGHT);
+
+    // move player to kill third zombie
+    res = dmc.tick(Direction.RIGHT);
+
+    // moving right again to destroy first spawner
+    res = dmc.tick(Direction.RIGHT);
+
+    // assert goal still not met
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
+
+    // and now to destroy second spawner
+    res = dmc.tick(Direction.RIGHT);
+
+    // assert goal met
+    assertEquals("", TestUtils.getGoals(res));
+  }
+
+  @Test
+  @DisplayName("Test achieving enemy goal with bomb")
+  public void bombDestroyEnemy() {
+    DungeonManiaController dmc;
+    dmc = new DungeonManiaController();
+    DungeonResponse res = dmc.newGame("d_task2Test_bombDestroyEnemy", "c_task2Test_bombDestroyEnemy");
+
+  }
+
+  @Test
+  @DisplayName("Test achieving enemy goal within a complex goal")
+  public void enemyComplexGoal() {
+    DungeonManiaController dmc;
+    dmc = new DungeonManiaController();
+    DungeonResponse res = dmc.newGame("d_task2Test_enemyComplexGoal", "c_task2Test_enemyComplexGoal");
+
+  }
 }
