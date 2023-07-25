@@ -196,6 +196,10 @@ public class Game {
         return player.getCollectedTreasureCount();
     }
 
+    public int getSlainEnemyCount() {
+        return player.getSlainEnemyCount();
+    }
+
     public Player getPlayer() {
         return player;
     }
