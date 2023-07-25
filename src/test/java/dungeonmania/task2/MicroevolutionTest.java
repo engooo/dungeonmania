@@ -15,7 +15,7 @@ public class MicroevolutionTest {
   public void oneEnemy() {
     DungeonManiaController dmc;
     dmc = new DungeonManiaController();
-    DungeonResponse res = dmc.newGame("d_task2Test_oneEnemy", "c_task2Test_oneEnemy");
+    DungeonResponse res = dmc.newGame("d_microevolutionsTest_oneEnemy", "c_microevolutionsTest_oneEnemy");
 
     // move player to right to pickup sword
     res = dmc.tick(Direction.RIGHT);
