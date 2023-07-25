@@ -10,7 +10,7 @@ public class EnemyGoal implements Goal {
   }
 
   public boolean achieved(Game game) {
-    return true;
+    return false;
   }
 
   public String toString(Game game) {

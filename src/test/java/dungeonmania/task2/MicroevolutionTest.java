@@ -37,7 +37,7 @@ public class MicroevolutionTest {
   public void oneEnemyAndSpawner() {
     DungeonManiaController dmc;
     dmc = new DungeonManiaController();
-    DungeonResponse res = dmc.newGame("d_task2Test_oneEnemyAndSpawner", "c_task2Test_oneEnemyAndSpawner");
+    DungeonResponse res = dmc.newGame("d_taskTwoTest_oneEnemyAndSpawner", "c_taskTwoTest_oneEnemyAndSpawner");
 
     // move player to right to pickup sword
     res = dmc.tick(Direction.RIGHT);
@@ -66,7 +66,7 @@ public class MicroevolutionTest {
   public void multipleEnemyAndSpawner() {
     DungeonManiaController dmc;
     dmc = new DungeonManiaController();
-    DungeonResponse res = dmc.newGame("d_task2Test_multipleEnemyAndSpawner", "c_task2Test_multipleEnemyAndSpawner");
+    DungeonResponse res = dmc.newGame("d_taskTwoTest_multipleEnemyAndSpawner", "c_taskTwoTest_multipleEnemyAndSpawner");
     // goal is only two zombies, but kill three in this test for the edge case
 
     // move player to right to pickup sword
@@ -104,8 +104,16 @@ public class MicroevolutionTest {
   public void bombDestroyEnemy() {
     DungeonManiaController dmc;
     dmc = new DungeonManiaController();
-    DungeonResponse res = dmc.newGame("d_task2Test_bombDestroyEnemy", "c_task2Test_bombDestroyEnemy");
+    DungeonResponse res = dmc.newGame("d_taskTwoTest_bombDestroyEnemy", "c_taskTwoTest_bombDestroyEnemy");
 
+    // assert goal not met
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
+
+    // move player to right to push boulder onto switch and activate bomb
+    res = dmc.tick(Direction.RIGHT);
+
+    // assert goal met
+    assertEquals("", TestUtils.getGoals(res));
   }
 
   @Test
@@ -113,7 +121,7 @@ public class MicroevolutionTest {
   public void enemyComplexGoal() {
     DungeonManiaController dmc;
     dmc = new DungeonManiaController();
-    DungeonResponse res = dmc.newGame("d_task2Test_enemyComplexGoal", "c_task2Test_enemyComplexGoal");
+    DungeonResponse res = dmc.newGame("d_taskTwoTest_enemyComplexGoal", "c_taskTwoTest_enemyComplexGoal");
 
     // move player to right to pickup sword
     res = dmc.tick(Direction.RIGHT);
