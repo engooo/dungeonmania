@@ -39,6 +39,8 @@ public class MicroevolutionTest {
     dmc = new DungeonManiaController();
     DungeonResponse res = dmc.newGame("d_taskTwoTest_oneEnemyAndSpawner", "c_taskTwoTest_oneEnemyAndSpawner");
 
+    String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
+
     // move player to right to pickup sword
     res = dmc.tick(Direction.RIGHT);
 
@@ -54,8 +56,8 @@ public class MicroevolutionTest {
     // assert goal still not met
     assertTrue(TestUtils.getGoals(res).contains(":enemies"));
 
-    // moving right again to destroy the spawner
-    res = dmc.tick(Direction.RIGHT);
+    // destroy spawner
+    res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
 
     // assert goal met
     assertEquals("", TestUtils.getGoals(res));
@@ -67,6 +69,10 @@ public class MicroevolutionTest {
     DungeonManiaController dmc;
     dmc = new DungeonManiaController();
     DungeonResponse res = dmc.newGame("d_taskTwoTest_multipleEnemyAndSpawner", "c_taskTwoTest_multipleEnemyAndSpawner");
+
+    String spawnerId1 = TestUtils.getEntities(res, "zombie_toast_spawner").get(1).getId();
+    String spawnerId2 = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
+
     // goal is only two zombies, but kill three in this test for the edge case
 
     // move player to right to pickup sword
@@ -86,16 +92,16 @@ public class MicroevolutionTest {
     // one more in case zombies moved
     res = dmc.tick(Direction.RIGHT);
 
-    // moving right again to destroy first spawner
-    res = dmc.tick(Direction.RIGHT);
+    // destroy first spawner
+    res = assertDoesNotThrow(() -> dmc.interact(spawnerId1));
 
     // assert goal still not met
     assertTrue(TestUtils.getGoals(res).contains(":enemies"));
 
-    // and now to destroy second spawner
+    // move right to second spawner and destroy it
     res = dmc.tick(Direction.RIGHT);
+    res = assertDoesNotThrow(() -> dmc.interact(spawnerId2));
 
-    // assert goal met
     assertEquals("", TestUtils.getGoals(res));
   }
 
@@ -104,7 +110,7 @@ public class MicroevolutionTest {
   public void bombDestroyEnemy() {
     DungeonManiaController dmc;
     dmc = new DungeonManiaController();
-    DungeonResponse res = dmc.newGame("d_taskTwoTest_bombDestroyEnemy", "c_taskTwoTest_bombDestroyEnemy");
+    DungeonResponse res = dmc.newGame("d_taskTwoTest_bombEnemy", "c_taskTwoTest_bombEnemy");
 
     // assert goal not met
     assertTrue(TestUtils.getGoals(res).contains(":enemies"));
@@ -123,6 +129,8 @@ public class MicroevolutionTest {
     dmc = new DungeonManiaController();
     DungeonResponse res = dmc.newGame("d_taskTwoTest_enemyComplexGoal", "c_taskTwoTest_enemyComplexGoal");
 
+    String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
+
     // move player to right to pickup sword
     res = dmc.tick(Direction.RIGHT);
 
@@ -137,15 +145,14 @@ public class MicroevolutionTest {
     // assert goal still not met
     assertTrue(TestUtils.getGoals(res).contains(":enemies"));
 
-    // moving right again to destroy the spawner
-    res = dmc.tick(Direction.RIGHT);
+    // destroy the spawner
+    res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
 
     // assert goal partially met
     assertFalse(TestUtils.getGoals(res).contains(":enemies"));
     assertTrue(TestUtils.getGoals(res).contains(":exit"));
 
     // move left back to exit
-    res = dmc.tick(Direction.LEFT);
     res = dmc.tick(Direction.LEFT);
     res = dmc.tick(Direction.LEFT);
     res = dmc.tick(Direction.LEFT);
