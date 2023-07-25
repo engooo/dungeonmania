@@ -1,19 +1,9 @@
 {
 	"entities": [
 			{
-					"type" : "player",
-					"x" : 1,
-					"y" : 1
-			},
-			{
-				"type": "zombie_toast",
-				"x": 4,
-				"y": 1
-			},
-			{
-				"type": "zombie_toast",
-				"x": 3,
-				"y": 1
+				"type" : "player",
+				"x" : 1,
+				"y" : 1
 			},
 			{
 				"type": "sword",
@@ -21,44 +11,109 @@
 				"y": 1
 			},
 			{
-				"type": "wall",
-				"x": 2,
-				"y": 0
-			},
-			{
-				"type": "wall",
-				"x": 2,
-				"y": 2
-			},
-			{
-				"type": "wall",
-				"x": 3,
-				"y": 0
-			},
-			{
-				"type": "wall",
-				"x": 3,
-				"y": 2
-			},
-			{
-				"type": "wall",
+				"type": "zombie_toast",
 				"x": 4,
-				"y": 0
+				"y": 1
 			},
 			{
-				"type": "wall",
-				"x": 4,
-				"y": 2
+				"type": "zombie_toast",
+				"x": 5,
+				"y": 1
+			},
+			{
+				"type": "zombie_toast",
+				"x": 6,
+				"y": 1
 			},
 			{
 				"type": "zombie_toast_spawner",
+				"x": 7,
+				"y": 1
+			},
+			{
+				"type": "zombie_toast_spawner",
+				"x": 8,
+				"y": 1
+			},
+			{
+				"type": "wall",
+				"x": 2,
+				"y": 2
+			},
+			{
+				"type": "wall",
+				"x": 3,
+				"y": 2
+			},
+			{
+				"type": "wall",
+				"x": 4,
+				"y": 2
+			},
+			{
+				"type": "wall",
 				"x": 5,
+				"y": 2
+			},
+			{
+				"type": "wall",
+				"x": 6,
+				"y": 2
+			},
+			{
+				"type": "wall",
+				"x": 7,
+				"y": 2
+			},
+			{
+				"type": "wall",
+				"x": 8,
+				"y": 2
+			},
+			{
+				"type": "wall",
+				"x": 2,
+				"y": 0
+			},
+			{
+				"type": "wall",
+				"x": 3,
+				"y": 0
+			},
+			{
+				"type": "wall",
+				"x": 4,
+				"y": 0
+			},
+			{
+				"type": "wall",
+				"x": 5,
+				"y": 0
+			},
+			{
+				"type": "wall",
+				"x": 6,
+				"y": 0
+			},
+			{
+				"type": "wall",
+				"x": 7,
+				"y": 0
+			},
+			{
+				"type": "wall",
+				"x": 8,
+				"y": 0
+			},
+			{
+				"type": "wall",
+				"x": 9,
 				"y": 1
 			},
 			{
 				"type": "exit",
 				"x": 0,
-				"y": 1
+				"y": 0
 			}
 	],
 	"goal-condition": {"goal": "exit"}

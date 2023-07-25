@@ -74,7 +74,6 @@ public class MicroevolutionTest {
 
     // move player to kill first zombie
     res = dmc.tick(Direction.RIGHT);
-    res = dmc.tick(Direction.RIGHT);
 
     // assert goal not met
     assertTrue(TestUtils.getGoals(res).contains(":enemies"));
@@ -83,6 +82,8 @@ public class MicroevolutionTest {
     res = dmc.tick(Direction.RIGHT);
 
     // move player to kill third zombie
+    res = dmc.tick(Direction.RIGHT);
+    // one more in case zombies moved
     res = dmc.tick(Direction.RIGHT);
 
     // moving right again to destroy first spawner
