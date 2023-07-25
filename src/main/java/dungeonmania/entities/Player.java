@@ -32,6 +32,7 @@ public class Player extends Entity implements Battleable, CanOverlap {
   private int nextTrigger = 0;
 
   private int collectedTreasureCount = 0;
+  private int slainEnemyCount = 0;
 
   private PlayerState invincibleState;
   private PlayerState invisibleState;
@@ -73,6 +74,14 @@ public class Player extends Entity implements Battleable, CanOverlap {
   public int getCollectedTreasureCount() {
     return collectedTreasureCount;
   }
+
+    public int getSlainEnemyCount() {
+        return slainEnemyCount;
+    }
+
+    public void incrementSlainEnemyCount() {
+        slainEnemyCount++;
+    }
 
   public boolean hasWeapon() {
     return inventory.hasWeapon();

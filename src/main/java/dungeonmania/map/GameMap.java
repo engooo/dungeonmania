@@ -197,6 +197,10 @@ public class GameMap {
         removeNode(entity);
         if (entity instanceof CanDestroy) {
             ((CanDestroy) entity).onDestroy(this);
+
+            if (entity instanceof Enemy) {
+                player.incrementSlainEnemyCount();
+            }
         }
     }
 
