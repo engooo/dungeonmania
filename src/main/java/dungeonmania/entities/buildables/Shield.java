@@ -1,25 +1,22 @@
 package dungeonmania.entities.buildables;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import dungeonmania.Game;
 import dungeonmania.battles.BattleStatistics;
+import dungeonmania.entities.buildables.recipes.AndRecipe;
+import dungeonmania.entities.buildables.recipes.ItemRecipe;
+import dungeonmania.entities.buildables.recipes.OrRecipe;
+import dungeonmania.entities.buildables.recipes.Recipe;
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
-import dungeonmania.entities.inventory.Inventory;
-import dungeonmania.entities.inventory.InventoryItem;
 
 public class Shield extends Buildable {
-  public static final List<Recipe> RECIPES = buildRecipes();
+  public static final Recipe RECIPE = buildRecipe();
   private int durability;
   private double defence;
 
   public Shield(int durability, double defence) {
-    super(null);
+    super(null, RECIPE);
     this.durability = durability;
     this.defence = defence;
   }
@@ -47,36 +44,11 @@ public class Shield extends Buildable {
     this.durability = durability;
   }
 
-  @Override
-  public List<Recipe> getRecipes() {
-    return RECIPES;
+  private static Recipe buildRecipe() {
+    Recipe recipe = new AndRecipe(new ItemRecipe(Wood.class, 2),
+        new OrRecipe(new ItemRecipe(Treasure.class, 1), new ItemRecipe(Key.class, 1)));
+
+    return recipe;
   }
 
-  private static List<Recipe> buildRecipes() {
-    // This implementation would word better if recipes were saved in the config
-    // file and could be read into the list. Since I don't think we can touch that
-    // file, building each recipe like this still works.
-    List<Recipe> recipes = new ArrayList<>();
-
-    Map<Class<? extends InventoryItem>, Integer> recipe1 = new HashMap<>();
-    recipe1.put(Wood.class, 2);
-    recipe1.put(Treasure.class, 1);
-    recipes.add(new Recipe(recipe1));
-
-    Map<Class<? extends InventoryItem>, Integer> recipe2 = new HashMap<>();
-    recipe2.put(Wood.class, 2);
-    recipe2.put(Key.class, 1);
-    recipes.add(new Recipe(recipe2));
-
-    return recipes;
-  }
-
-  public static boolean canBuild(Inventory inventory) {
-    for (Recipe recipe : RECIPES) {
-      if (recipe.canBuild(inventory)) {
-        return true;
-      }
-    }
-    return false;
-  }
 }
