@@ -116,13 +116,14 @@ public class SceptreTest {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse res = dmc.newGame("d_SceptreTest_sceptreRecipes", "c_SceptreTest_sceptreRecipes");
         // Build sceptre
-        res = dmc.tick(Direction.RIGHT);
-        res = dmc.tick(Direction.RIGHT);
-        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
         res = assertDoesNotThrow(() -> dmc.build("sceptre"));
 
         // walk into mercenary, a battle does not occur
-        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
         assertEquals(0, res.getBattles().size());
 
     }
