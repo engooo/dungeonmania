@@ -1,22 +1,21 @@
 package dungeonmania.entities.buildables;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import dungeonmania.battles.BattleStatistics;
+import dungeonmania.entities.buildables.recipes.AndRecipe;
+import dungeonmania.entities.buildables.recipes.ItemRecipe;
+import dungeonmania.entities.buildables.recipes.OrRecipe;
+import dungeonmania.entities.buildables.recipes.Recipe;
 import dungeonmania.entities.collectables.Arrow;
+import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
-import dungeonmania.entities.inventory.Inventory;
-import dungeonmania.entities.inventory.InventoryItem;
 
 public class Bow extends Buildable {
-  public static final List<Recipe> RECIPES = buildRecipes();
+  public static final Recipe RECIPE = buildRecipe();
   private int durability;
 
   public Bow(int durability) {
-    super(null);
+    super(null, RECIPE);
     this.durability = durability;
   }
 
@@ -35,28 +34,10 @@ public class Bow extends Buildable {
     this.durability = durability;
   }
 
-  @Override
-  public List<Recipe> getRecipes() {
-    return RECIPES;
+  private static Recipe buildRecipe() {
+    Recipe recipe = new AndRecipe(new ItemRecipe(Wood.class, 1), new ItemRecipe(Arrow.class, 3));
+
+    return recipe;
   }
 
-  private static List<Recipe> buildRecipes() {
-    List<Recipe> recipes = new ArrayList<>();
-
-    Map<Class<? extends InventoryItem>, Integer> recipe = new HashMap<>();
-    recipe.put(Wood.class, 1);
-    recipe.put(Arrow.class, 3);
-    recipes.add(new Recipe(recipe));
-
-    return recipes;
-  }
-
-  public static boolean canBuild(Inventory inventory) {
-    for (Recipe recipe : RECIPES) {
-      if (recipe.canBuild(inventory)) {
-        return true;
-      }
-    }
-    return false;
-  }
 }
