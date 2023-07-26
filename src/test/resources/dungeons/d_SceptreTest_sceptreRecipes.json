@@ -1,0 +1,129 @@
+{
+    "entities": [
+      {
+        "x": 2,
+        "y": 1,
+        "type": "player"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "wood"
+      },
+      {
+        "x": 4,
+        "y": 1,
+        "type": "treasure"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "sun_stone"
+      },
+      {
+        "x": 3,
+        "y": 2,
+        "type": "sun_stone"
+      },
+      {
+        "key": "1",
+        "x": 4,
+        "y": 2,
+        "type": "key"
+      },
+      {
+        "x": 5,
+        "y": 2,
+        "type": "wood"
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "type": "arrow"
+      },
+      {
+        "x": 4,
+        "y": 3,
+        "type": "arrow"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "type": "treasure"
+      },
+      {
+        "x": 6,
+        "y": 3,
+        "type": "sun_stone"
+      },
+      {
+        "x": 3,
+        "y": 4,
+        "type": "sun_stone"
+      },
+      {
+        "x": 4,
+        "y": 4,
+        "type": "key",
+        "key": "1"
+      },
+      {
+        "x": 5,
+        "y": 4,
+        "type": "arrow"
+      },
+      {
+        "x": 6,
+        "y": 4,
+        "type": "arrow"
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "type": "arrow"
+      },
+      {
+        "x": 4,
+        "y": 5,
+        "type": "arrow"
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "type": "sun_stone"
+      },
+      {
+        "x": 6,
+        "y": 5,
+        "type": "sun_stone"
+      },
+      {
+        "x": 4,
+        "y": 6,
+        "type": "sun_stone"
+      },
+      {
+        "x": 5,
+        "y": 6,
+        "type": "sun_stone"
+      },
+      {
+        "x": 6,
+        "y": 6,
+        "type": "wood"
+      },
+      {
+        "x": 4,
+        "y": 7,
+        "type": "sun_stone"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "type": "wood"
+      }
+    ],
+    "goal-condition": {
+      "goal": "exit"
+    }
+  }
