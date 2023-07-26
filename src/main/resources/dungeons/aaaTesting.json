@@ -21,15 +21,25 @@
 				"y" : 1
 			},
 			{
-				"type" : "zombie_toast_spawner",
-				"x" : 2,
-				"y" : 0
+				"type" : "sun_stone",
+				"x" : 0,
+				"y" : 3
 			},
 			{
-				"type" : "zombie_toast",
-				"x" : 3,
-				"y" : 1
+				"type" : "sun_stone",
+				"x" : 0,
+				"y" : 4
+			},
+			{
+				"type" : "wood",
+				"x" : 0,
+				"y" : 5
+			},
+			{
+				"type" : "exit",
+				"x" : 0,
+				"y" : 0
 			}
 	],
-	"goal-condition": {"goal": "enemies"}
+	"goal-condition": {"goal": "exit"}
 }

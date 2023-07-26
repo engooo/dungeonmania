@@ -3,6 +3,8 @@ package dungeonmania.entities;
 import dungeonmania.Game;
 import dungeonmania.entities.buildables.Bow;
 import dungeonmania.entities.buildables.Buildable;
+import dungeonmania.entities.buildables.MidnightArmour;
+import dungeonmania.entities.buildables.Sceptre;
 import dungeonmania.entities.buildables.Shield;
 import dungeonmania.entities.collectables.*;
 import dungeonmania.entities.collectables.Sword;
@@ -33,12 +35,16 @@ public class EntityFactory {
 
   public Buildable createBuildable(String type) {
     switch (type) {
-      case "bow":
-        return buildBow();
-      case "shield":
-        return buildShield();
-      default:
-        return null;
+    case "bow":
+      return buildBow();
+    case "shield":
+      return buildShield();
+    case "sceptre":
+      return buildSceptre();
+    case "midnight_armour":
+      return buildMidnightArmour();
+    default:
+      return null;
     }
   }
 
@@ -119,8 +125,8 @@ public class EntityFactory {
     double allyDefence = config.optDouble("ally_defence", Mercenary.DEFAULT_ATTACK);
     int mercenaryBribeAmount = config.optInt("bribe_amount", Mercenary.DEFAULT_BRIBE_AMOUNT);
     int mercenaryBribeRadius = config.optInt("bribe_radius", Mercenary.DEFAULT_BRIBE_RADIUS);
-    return new Mercenary(pos, mercenaryHealth, mercenaryAttack, mercenaryBribeAmount, mercenaryBribeRadius,
-        allyAttack, allyDefence);
+    return new Mercenary(pos, mercenaryHealth, mercenaryAttack, mercenaryBribeAmount, mercenaryBribeRadius, allyAttack,
+        allyDefence);
   }
 
   public Bow buildBow() {
@@ -134,57 +140,70 @@ public class EntityFactory {
     return new Shield(shieldDurability, shieldDefence);
   }
 
+  public Sceptre buildSceptre() {
+    int sceptreDurability = config.optInt("mind_control_duration");
+    return new Sceptre(sceptreDurability);
+  }
+
+  public MidnightArmour buildMidnightArmour() {
+    int armourAttack = config.optInt("midnight_armour_attack");
+    int armourDefense = config.optInt("midnight_armour_defence");
+    return new MidnightArmour(armourAttack, armourDefense);
+  }
+
   private Entity constructEntity(JSONObject jsonEntity, JSONObject config) {
     Position pos = new Position(jsonEntity.getInt("x"), jsonEntity.getInt("y"));
 
     switch (jsonEntity.getString("type")) {
-      case "player":
-        return buildPlayer(pos);
-      case "zombie_toast":
-        return buildZombieToast(pos);
-      case "zombie_toast_spawner":
-        return buildZombieToastSpawner(pos);
-      case "mercenary":
-        return buildMercenary(pos);
-      case "wall":
-        return new Wall(pos);
-      case "boulder":
-        return new Boulder(pos);
-      case "switch":
-        return new Switch(pos);
-      case "exit":
-        return new Exit(pos);
-      case "treasure":
-        return new Treasure(pos);
-      case "wood":
-        return new Wood(pos);
-      case "arrow":
-        return new Arrow(pos);
-      case "bomb":
-        int bombRadius = config.optInt("bomb_radius", Bomb.DEFAULT_RADIUS);
-        return new Bomb(pos, bombRadius);
-      case "invisibility_potion":
-        int invisibilityPotionDuration = config.optInt("invisibility_potion_duration",
-            InvisibilityPotion.DEFAULT_DURATION);
-        return new InvisibilityPotion(pos, invisibilityPotionDuration);
-      case "invincibility_potion":
-        int invincibilityPotionDuration = config.optInt("invincibility_potion_duration",
-            InvincibilityPotion.DEFAULT_DURATION);
-        return new InvincibilityPotion(pos, invincibilityPotionDuration);
-      case "portal":
-        return new Portal(pos, ColorCodedType.valueOf(jsonEntity.getString("colour")));
-      case "sword":
-        double swordAttack = config.optDouble("sword_attack", Sword.DEFAULT_ATTACK);
-        int swordDurability = config.optInt("sword_durability", Sword.DEFAULT_DURABILITY);
-        return new Sword(pos, swordAttack, swordDurability);
-      case "spider":
-        return buildSpider(pos);
-      case "door":
-        return new Door(pos, jsonEntity.getInt("key"));
-      case "key":
-        return new Key(pos, jsonEntity.getInt("key"));
-      default:
-        return null;
+    case "player":
+      return buildPlayer(pos);
+    case "zombie_toast":
+      return buildZombieToast(pos);
+    case "zombie_toast_spawner":
+      return buildZombieToastSpawner(pos);
+    case "mercenary":
+      return buildMercenary(pos);
+    case "wall":
+      return new Wall(pos);
+    case "boulder":
+      return new Boulder(pos);
+    case "switch":
+      return new Switch(pos);
+    case "exit":
+      return new Exit(pos);
+    case "treasure":
+      return new Treasure(pos);
+    case "wood":
+      return new Wood(pos);
+    case "arrow":
+      return new Arrow(pos);
+    case "bomb":
+      int bombRadius = config.optInt("bomb_radius", Bomb.DEFAULT_RADIUS);
+      return new Bomb(pos, bombRadius);
+    case "invisibility_potion":
+      int invisibilityPotionDuration = config.optInt("invisibility_potion_duration",
+          InvisibilityPotion.DEFAULT_DURATION);
+      return new InvisibilityPotion(pos, invisibilityPotionDuration);
+    case "invincibility_potion":
+      int invincibilityPotionDuration = config.optInt("invincibility_potion_duration",
+          InvincibilityPotion.DEFAULT_DURATION);
+      return new InvincibilityPotion(pos, invincibilityPotionDuration);
+    case "portal":
+      return new Portal(pos, ColorCodedType.valueOf(jsonEntity.getString("colour")));
+    case "sword":
+      double swordAttack = config.optDouble("sword_attack", Sword.DEFAULT_ATTACK);
+      int swordDurability = config.optInt("sword_durability", Sword.DEFAULT_DURABILITY);
+      return new Sword(pos, swordAttack, swordDurability);
+    case "spider":
+      return buildSpider(pos);
+    case "door":
+      return new Door(pos, jsonEntity.getInt("key"));
+    case "key":
+      return new Key(pos, jsonEntity.getInt("key"));
+    case "sun_stone":
+      return new SunStone(pos);
+    default:
+      return null;
     }
   }
 }
