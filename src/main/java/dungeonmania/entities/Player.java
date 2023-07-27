@@ -7,7 +7,7 @@ import java.util.Queue;
 import dungeonmania.battles.BattleStatistics;
 import dungeonmania.battles.Battleable;
 import dungeonmania.entities.collectables.Bomb;
-import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.collectables.TreasureItem;
 import dungeonmania.entities.collectables.potions.Potion;
 import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.entities.enemies.Mercenary;
@@ -130,7 +130,7 @@ public class Player extends Entity implements Battleable, ActionOnOverlap {
   }
 
   public boolean pickUp(Entity item) {
-    if (item instanceof Treasure)
+    if (item instanceof TreasureItem)
       collectedTreasureCount++;
 
     if (item instanceof InventoryItem) {

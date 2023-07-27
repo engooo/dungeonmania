@@ -6,7 +6,9 @@ import dungeonmania.entities.buildables.recipes.AndRecipe;
 import dungeonmania.entities.buildables.recipes.ItemRecipe;
 import dungeonmania.entities.buildables.recipes.OrRecipe;
 import dungeonmania.entities.buildables.recipes.Recipe;
+import dungeonmania.entities.buildables.recipes.StaticItemRecipe;
 import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
 
@@ -45,8 +47,8 @@ public class Shield extends Buildable {
   }
 
   private static Recipe buildRecipe() {
-    Recipe recipe = new AndRecipe(new ItemRecipe(Wood.class, 2),
-        new OrRecipe(new ItemRecipe(Treasure.class, 1), new ItemRecipe(Key.class, 1)));
+    Recipe recipe = new AndRecipe(new ItemRecipe(Wood.class, 2), new OrRecipe(new StaticItemRecipe(SunStone.class, 1),
+        new OrRecipe(new ItemRecipe(Treasure.class, 1), new ItemRecipe(Key.class, 1))));
 
     return recipe;
   }
