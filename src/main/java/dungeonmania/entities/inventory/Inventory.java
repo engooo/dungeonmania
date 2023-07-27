@@ -9,8 +9,11 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.EntityFactory;
 import dungeonmania.entities.buildables.Bow;
 import dungeonmania.entities.buildables.Buildable;
+import dungeonmania.entities.buildables.MidnightArmour;
+import dungeonmania.entities.buildables.Sceptre;
 import dungeonmania.entities.buildables.Shield;
 import dungeonmania.entities.collectables.Sword;
+import dungeonmania.map.GameMap;
 
 public class Inventory {
   private List<InventoryItem> items = new ArrayList<>();
@@ -24,23 +27,29 @@ public class Inventory {
     items.remove(item);
   }
 
-  public List<String> getBuildables() {
+  public List<String> getBuildables(GameMap map) {
     // This could probably be improved becuase its still hard coded for each entity
     // type, but it's better than before.
     List<String> result = new ArrayList<>();
 
-    if ((new Bow(0)).canBuild(this)) {
+    if ((new Bow(0)).canBuild(map, this)) {
       result.add("bow");
     }
-    if ((new Shield(0, 0)).canBuild(this)) {
+    if ((new Shield(0, 0)).canBuild(map, this)) {
       result.add("shield");
+    }
+    if ((new Sceptre(0)).canBuild(map, this)) {
+      result.add("sceptre");
+    }
+    if ((new MidnightArmour(0, 0)).canBuild(map, this)) {
+      result.add("midnight_armour");
     }
     return result;
   }
 
-  public InventoryItem checkBuildCriteria(String buildable, EntityFactory factory) {
+  public InventoryItem checkBuildCriteria(GameMap map, String buildable, EntityFactory factory) {
     Buildable item = factory.createBuildable(buildable);
-    if (item.canBuild(this)) {
+    if (item.canBuild(map, this)) {
       item.removeRecipeItems(this);
       return item;
     }

@@ -6,21 +6,20 @@ import dungeonmania.entities.buildables.recipes.AndRecipe;
 import dungeonmania.entities.buildables.recipes.ItemRecipe;
 import dungeonmania.entities.buildables.recipes.OrRecipe;
 import dungeonmania.entities.buildables.recipes.Recipe;
-import dungeonmania.entities.buildables.recipes.StaticItemRecipe;
+import dungeonmania.entities.buildables.recipes.ReplacedItemRecipe;
+import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
 
-public class Shield extends Buildable {
+public class Sceptre extends Buildable {
   public static final Recipe RECIPE = buildRecipe();
   private int durability;
-  private double defence;
 
-  public Shield(int durability, double defence) {
+  public Sceptre(int durability) {
     super(null, RECIPE);
     this.durability = durability;
-    this.defence = defence;
   }
 
   @Override
@@ -33,7 +32,9 @@ public class Shield extends Buildable {
 
   @Override
   public BattleStatistics applyBuff(BattleStatistics origin) {
-    return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, defence, 1, 1));
+    // TODO This doesnt apply a buff but it can be used? (Second aprt might be a lie.)
+    // Either way we have to add more interfaces.
+    return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 0, 1));
   }
 
   @Override
@@ -47,10 +48,15 @@ public class Shield extends Buildable {
   }
 
   private static Recipe buildRecipe() {
-    Recipe recipe = new AndRecipe(new ItemRecipe(Wood.class, 2), new OrRecipe(new StaticItemRecipe(SunStone.class, 1),
-        new OrRecipe(new ItemRecipe(Treasure.class, 1), new ItemRecipe(Key.class, 1))));
+    Recipe recipe = new AndRecipe(new OrRecipe(new ItemRecipe(Wood.class, 1), new ItemRecipe(Arrow.class, 2)),
+        new OrRecipe(new ReplacedItemRecipe(SunStone.class, 1, 2),
+            new AndRecipe(new OrRecipe(new ItemRecipe(Key.class, 1), new ItemRecipe(Treasure.class, 1)),
+                new ItemRecipe(SunStone.class, 1))));
 
     return recipe;
   }
 
+  public int getDuration() {
+    return durability;
+  }
 }
