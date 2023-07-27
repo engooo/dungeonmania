@@ -1,37 +1,39 @@
 package dungeonmania.entities;
 
 import dungeonmania.entities.enemies.Spider;
+import dungeonmania.entities.movementListeners.ActionOnOverlap;
 import dungeonmania.map.GameMap;
-import dungeonmania.movementListeners.CanOverlap;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-public class Boulder extends Entity implements CanOverlap {
+public class Boulder extends Entity implements ActionOnOverlap {
+  public Boulder(Position position) {
+    super(position.asLayer(Entity.CHARACTER_LAYER));
+  }
 
-    public Boulder(Position position) {
-        super(position.asLayer(Entity.CHARACTER_LAYER));
+  @Override
+  public boolean canMoveOnto(GameMap map, Entity entity) {
+    if (entity instanceof Spider)
+      return false;
+    if (entity instanceof Player && canPush(map, entity.getFacing()))
+      return true;
+    return false;
+  }
+
+  @Override
+  public void onOverlap(GameMap map, Entity entity) {
+    if (entity instanceof Player) {
+      map.moveTo(this, entity.getFacing());
     }
+  }
 
-    @Override
-    public boolean canMoveOnto(GameMap map, Entity entity) {
-        if (entity instanceof Spider) return false;
-        if (entity instanceof Player && canPush(map, entity.getFacing())) return true;
+  private boolean canPush(GameMap map, Direction direction) {
+    Position newPosition = Position.translateBy(this.getPosition(), direction);
+    for (Entity e : map.getEntities(newPosition)) {
+      if (!e.canMoveOnto(map, this))
         return false;
     }
-
-    @Override
-    public void onOverlap(GameMap map, Entity entity) {
-        if (entity instanceof Player) {
-            map.moveTo(this, entity.getFacing());
-        }
-    }
-
-    private boolean canPush(GameMap map, Direction direction) {
-        Position newPosition = Position.translateBy(this.getPosition(), direction);
-        for (Entity e : map.getEntities(newPosition)) {
-            if (!e.canMoveOnto(map, this)) return false;
-        }
-        return true;
-    }
+    return true;
+  }
 
 }
