@@ -19,6 +19,7 @@ class MenuScene extends Scene {
   private newGame: TextButton;
   private exitGame: TextButton;
   private credits: TextButton;
+  private newDungeon: TextButton;
 
   constructor() {
     super("scene-menu");
@@ -276,10 +277,129 @@ class MenuScene extends Scene {
     this.add.existing(this.exitGame);
     this.exitGame.setX(-this.exitGame.width);
 
+    this.newDungeon = new TextButton(
+      this,
+      10,
+      this.renderer.height / 4 +
+        this.newGame.height +
+        this.credits.height +
+        this.exitGame.height +
+        40 +
+        20 +
+        75,
+        window.Config.localisation.main_menu.buttons.new_dungeon,
+        {
+          fontSize: "25px",
+          fontFamily: "main_menu-font",
+        },
+        async () => {
+          const configs = await API.getConfigs();
+          let dungeon: Dungeon;
+  
+          const result = await Swal.fire({
+            title: "Create New Dungeon",
+            heightAuto: false,
+            html: `      
+            <label for="xStart" class="f6 b db mb2 mt3">xStart</label>
+                <select id="xStart" class="swal2-input">
+                  ${generateOptions(-50, 50)}
+                </select>
+                <label for="yStart" class="f6 b db mb2 mt3">yStart</label>
+                <select id="yStart" class="swal2-input">
+                  ${generateOptions(-50, 50)}
+                </select>
+                <label for="xEnd" class="f6 b db mb2 mt3">xEnd</label>
+                <select id="xEnd" class="swal2-input">
+                  ${generateOptions(-50, 50)}
+                </select>
+                <label for="yEnd" class="f6 b db mb2 mt3">yEnd</label>
+                <select id="yEnd" class="swal2-input">
+                  ${generateOptions(-50, 50)}
+                </select>
+  
+            <label for="config" class="f6 b db mb2 mt3"
+                >Configuration<span class="normal black-60"></span></label
+            >
+            <select
+                id="config"
+                class="swal2-input"
+                list="configs"
+                required=""
+                >
+                <datalist id="configs">
+                ${configs.map((x) => `<option>${x}</option>`).join("\n")}
+                </datalist>
+            </select>
+            `,
+            focusConfirm: false,
+            showCancelButton: true,
+            showLoaderOnConfirm: true,
+            allowOutsideClick: () => !Swal.isLoading(),
+            preConfirm: async () => {
+              let inputValidator = async (values) => {
+                if (!values || !values[0]) {
+                  Swal.showValidationMessage("You need to select a xStart");
+                  return false;
+                }
+                if (!values || !values[1]) {
+                  Swal.showValidationMessage("You need to select a yStart");
+                  return false;
+                }
+                if (!values || !values[2]) {
+                  Swal.showValidationMessage("You need to select a xEnd");
+                  return false;
+                }
+                if (!values || !values[3]) {
+                  Swal.showValidationMessage("You need to select a yEnd");
+                  return false;
+                }
+                if (!values || !values[4]) {
+                  Swal.showValidationMessage("You need to select a config file");
+                  return false;
+                }
+                return values;
+              };
+              let results = [
+                (document.getElementById("yStart") as HTMLInputElement).value,
+                (document.getElementById("yStart") as HTMLInputElement).value,
+                (document.getElementById("xEnd") as HTMLInputElement).value,
+                (document.getElementById("yEnd") as HTMLInputElement).value,
+                (document.getElementById("config") as HTMLInputElement).value,
+              ];
+              if (await inputValidator(results)) {
+                dungeon = await API.newDungeon(results[0], results[1], results[2], results[3], results[4]);
+                return !!dungeon;
+              }
+            },
+          });
+  
+          if (result.isConfirmed) {
+            // For debugging we won't do the *smart* thing here which is just
+            // to invoke a load event on the game scene. Instead we'll store the dungeon
+            // in our window frame and then load the next scene to read from it.
+            window.Dungeon = dungeon;
+            this.scene.start("scene-game");
+          }
+        }
+    
+    );
+
+    this.add.existing(this.newDungeon);
+    this.newDungeon.setX(-this.newDungeon.width);
+
+    
+    function generateOptions(min: number, max: number): string {
+      let options = '';
+      for (let i = min; i <= max; i++) {
+        options += `<option>${i}</option>`;
+      }
+      return options;
+    }
+
     this.tweens.add({
       delay: 3500,
       duration: 1000,
-      targets: [this.newGame, this.credits, this.exitGame],
+      targets: [this.newGame, this.newDungeon, this.credits, this.exitGame],
       x: 10,
       ease: "Bounce",
     });

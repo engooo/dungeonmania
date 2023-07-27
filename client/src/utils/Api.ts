@@ -137,6 +137,24 @@ export const API = {
       "Error POST /game/new: DungeonManiaController::ctor(...)",
       null
     ),
+  newDungeon: (xStart: string, yStart: string, xEnd: string, yEnd: string, configName: string): Promise<Dungeon | null> =>
+    evaluateResponse(
+      axios.post(
+        URL + "/api/game/new/generate",
+        {},
+        {
+          params: {
+            xStart,
+            yStart,
+            xEnd,
+            yEnd,
+            configName
+          },
+        }
+      ),
+      "Error POST /game/new: DungeonManiaController::ctor(...)",
+      null
+    ),
   interact: async (entityId: string): Promise<Dungeon | null> => {
     if (currentResponse) await currentResponse;
     return (currentResponse = evaluateResponse(
