@@ -25,7 +25,7 @@ public class MidnightArmourTest {
         DungeonManiaController controller = new DungeonManiaController();
         String config = "c_midnightArmourTest_MidnightArmourBuffs";
         DungeonResponse res = controller.newGame("d_midnightArmourTest_MidnightArmourBuffs.json", config);
-        
+
         // mercenary attack: 5, health: 20, same as zombie
         // player attack: 5, health: 100
         // midnight attack: 2, defence: 2
@@ -50,10 +50,10 @@ public class MidnightArmourTest {
         BattleResponse firstBattle = battles.get(0);
         RoundResponse firstRound = firstBattle.getRounds().get(0);
 
-        // This is the attack without the armour 
+        // This is the attack without the armour
         double enemyAttack = Double.parseDouble(TestUtils.getValueFromConfigFile("mercenary_attack", config));
         // double playerHealth = Double.parseDouble(TestUtils.getValueFromConfigFile("player_health", config));
-       
+
         // compare playerBaseAttack and playerDamageTaken later
         double playerBaseAttack = Double.parseDouble(TestUtils.getValueFromConfigFile("player_base_attack", config));
         double swordAttackBonus = Double.parseDouble(TestUtils.getValueFromConfigFile("sword_attack", config));
@@ -61,7 +61,7 @@ public class MidnightArmourTest {
 
         assertEquals((playerAttack) / 5, -firstRound.getDeltaEnemyHealth(), 0.001);
         assertEquals((enemyAttack / 10), -firstRound.getDeltaCharacterHealth(), 0.001);
-        
+
         // move right, should be on (4,1)
         res = controller.tick(Direction.RIGHT);
 
@@ -90,24 +90,27 @@ public class MidnightArmourTest {
         RoundResponse secondRound = secondBattle.getRounds().get(1);
 
         // This is the attack with the armour
-        double midnightAttackBonus = Double.parseDouble(TestUtils.getValueFromConfigFile("midnight_armour_attack", config));
+        double midnightAttackBonus = Double.parseDouble(
+            TestUtils.getValueFromConfigFile("midnight_armour_attack", config));
         assertEquals((playerAttack + midnightAttackBonus) / 5, -secondRound.getDeltaEnemyHealth(), 0.001);
 
-        double midnightDefenceBonus = Double.parseDouble(TestUtils.getValueFromConfigFile("midnight_armour_defence", config));
-        assertEquals((enemyAttack - midnightDefenceBonus/ 10), -secondRound.getDeltaCharacterHealth(), 0.001);
+        double midnightDefenceBonus = Double.parseDouble(
+            TestUtils.getValueFromConfigFile("midnight_armour_defence", config));
+        assertEquals((enemyAttack - midnightDefenceBonus / 10), -secondRound.getDeltaCharacterHealth(), 0.001);
 
         // More damage dealt with armour
         assertTrue(secondRound.getDeltaEnemyHealth() < firstRound.getDeltaEnemyHealth());
-        
+
         // Less damage taken with armour
-        
+
     }
 
     @Test
     @DisplayName("Cannot craft with zombies in dungeon")
     public void midnightArmourZombie() throws IllegalArgumentException, InvalidActionException {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_midnightArmourTest_midnightArmourZombie", "c_midnightArmourTest_midnightArmourZombie");
+        DungeonResponse res = dmc.newGame("d_midnightArmourTest_midnightArmourZombie",
+        "c_midnightArmourTest_midnightArmourZombie");
 
         // pick up sword and sunstone
         res = dmc.tick(Direction.UP);
