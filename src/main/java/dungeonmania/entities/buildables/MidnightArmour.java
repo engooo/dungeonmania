@@ -5,7 +5,6 @@ import dungeonmania.battles.BattleStatistics;
 import dungeonmania.entities.buildables.recipes.AndRecipe;
 import dungeonmania.entities.buildables.recipes.ItemRecipe;
 import dungeonmania.entities.buildables.recipes.Recipe;
-import dungeonmania.entities.buildables.recipes.StaticItemRecipe;
 import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.enemies.ZombieToast;
@@ -52,7 +51,7 @@ public class MidnightArmour extends Buildable {
   }
 
   private static Recipe buildRecipe() {
-    Recipe recipe = new AndRecipe(new ItemRecipe(Sword.class, 1), new StaticItemRecipe(SunStone.class, 1));
+    Recipe recipe = new AndRecipe(new ItemRecipe(Sword.class, 1), new ItemRecipe(SunStone.class, 1));
 
     return recipe;
   }

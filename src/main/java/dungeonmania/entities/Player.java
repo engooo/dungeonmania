@@ -6,6 +6,7 @@ import java.util.Queue;
 
 import dungeonmania.battles.BattleStatistics;
 import dungeonmania.battles.Battleable;
+import dungeonmania.entities.buildables.Sceptre;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.TreasureItem;
 import dungeonmania.entities.collectables.potions.Potion;
@@ -207,4 +208,16 @@ public class Player extends Entity implements Battleable, ActionOnOverlap {
   private void setCurrMap(GameMap currMap) {
     this.currMap = currMap;
   }
+
+  /**
+   * @pre hasItem(Sceptre) returned true
+   */
+  public int getMindControlDuration() {
+    return inventory.getFirst(Sceptre.class).getDuration();
+  }
+
+  public <T extends InventoryItem> boolean hasItem(Class<T> itemType) {
+    return !inventory.getEntities(itemType).isEmpty();
+  }
+
 }

@@ -118,30 +118,22 @@ public class SceptreTest {
   @DisplayName("Testing mind control")
   public void mindControl() {
     DungeonManiaController dmc = new DungeonManiaController();
-    DungeonResponse res = dmc.newGame("d_SceptreTest_sceptreRecipes", "c_SceptreTest_sceptreRecipes");
+    DungeonResponse res = dmc.newGame("d_SceptreTest_mindControl", "c_SceptreTest_mindControl");
+    String mercenaryId = TestUtils.getEntities(res, "mercenary").get(0).getId();
+
     // Build sceptre
-    res = dmc.tick(Direction.RIGHT);
-    res = dmc.tick(Direction.RIGHT);
-    res = dmc.tick(Direction.RIGHT);
+    res = dmc.tick(Direction.DOWN);
+    res = dmc.tick(Direction.DOWN);
+    res = dmc.tick(Direction.DOWN);
     res = assertDoesNotThrow(() -> dmc.build("sceptre"));
 
-    @Test
-    @DisplayName("Testing mind control")
-    public void mindControl() {
-        DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_SceptreTest_sceptreRecipes", "c_SceptreTest_sceptreRecipes");
-        // Build sceptre
-        res = dmc.tick(Direction.DOWN);
-        res = dmc.tick(Direction.DOWN);
-        res = dmc.tick(Direction.DOWN);
-        res = assertDoesNotThrow(() -> dmc.build("sceptre"));
+    // Mind control mercenary
+    res = assertDoesNotThrow(() -> dmc.interact(mercenaryId));
 
-        // walk into mercenary, a battle does not occur
-        res = dmc.tick(Direction.DOWN);
-        res = dmc.tick(Direction.DOWN);
-        assertEquals(0, res.getBattles().size());
-
-    }
+    // walk into mercenary, a battle does not occur
+    res = dmc.tick(Direction.DOWN);
+    res = dmc.tick(Direction.DOWN);
+    assertEquals(0, res.getBattles().size());
 
   }
 }

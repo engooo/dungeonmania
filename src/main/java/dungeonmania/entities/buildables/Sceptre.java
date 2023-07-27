@@ -55,4 +55,8 @@ public class Sceptre extends Buildable {
 
     return recipe;
   }
+
+  public int getDuration() {
+    return durability;
+  }
 }

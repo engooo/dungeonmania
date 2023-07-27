@@ -2,6 +2,7 @@ package dungeonmania.entities;
 
 import dungeonmania.map.GameMap;
 import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.enemies.Spider;
 import dungeonmania.entities.inventory.Inventory;
 import dungeonmania.entities.movementListeners.ActionOnOverlap;
@@ -21,7 +22,7 @@ public class Door extends Entity implements ActionOnOverlap {
     if (open || entity instanceof Spider) {
       return true;
     }
-    return (entity instanceof Player && hasKey((Player) entity));
+    return (entity instanceof Player && ((hasKey((Player) entity)) || ((Player) entity).hasItem(SunStone.class)));
   }
 
   @Override

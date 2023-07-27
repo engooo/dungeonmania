@@ -45,6 +45,7 @@
         "boulders": "images/tileset/entities/boulder_00.png",
         "enemies": "images/tileset/items/sword_silver.png",
         "sceptre": "images/tileset/entities/sceptre.png",
-        "sun_stone": "images/tileset/entities/sun_stone.png"
+        "sun_stone": "images/tileset/entities/sun_stone.png",
+        "midnight_armour": "images/tileset/entities/midnight_armour.png"
     }
 }
