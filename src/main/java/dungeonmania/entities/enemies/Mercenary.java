@@ -144,7 +144,7 @@ public class Mercenary extends Enemy implements Interactable {
     }
   }
 
-  private boolean alliedOrMindControl() {
+  public boolean alliedOrMindControl() {
     return allied || mindControl > 0;
   }
 }
