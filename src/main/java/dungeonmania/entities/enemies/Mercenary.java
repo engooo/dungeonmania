@@ -97,6 +97,7 @@ public class Mercenary extends Enemy implements Interactable {
   @Override
   public void move(Game game) {
     determineMovementStrategy(game);
+    mindControl--;
 
     GameMap map = game.getMap();
     Player player = game.getPlayer();
@@ -143,7 +144,7 @@ public class Mercenary extends Enemy implements Interactable {
     }
   }
 
-  private boolean alliedOrMindControl() {
+  public boolean alliedOrMindControl() {
     return allied || mindControl > 0;
   }
 }
