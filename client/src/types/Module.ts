@@ -24,6 +24,7 @@ export type LocalisationFile = {
     subtitle_1: string;
     subtitle_2: string;
     buttons: {
+      new_dungeon: string;
       new_game: string;
       generate_game: string;
       load_game: string;
