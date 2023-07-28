@@ -3,11 +3,8 @@ package dungeonmania.entities.buildables;
 import dungeonmania.battles.BattleStatistics;
 import dungeonmania.entities.buildables.recipes.AndRecipe;
 import dungeonmania.entities.buildables.recipes.ItemRecipe;
-import dungeonmania.entities.buildables.recipes.OrRecipe;
 import dungeonmania.entities.buildables.recipes.Recipe;
 import dungeonmania.entities.collectables.Arrow;
-import dungeonmania.entities.collectables.Key;
-import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Wood;
 
 public class Bow extends Buildable {

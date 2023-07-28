@@ -2,8 +2,8 @@ package dungeonmania.entities.collectables;
 
 import dungeonmania.util.Position;
 
-public class Treasure extends TreasureItem {
-  public Treasure(Position position) {
+public class SunStone extends TreasureItem {
+  public SunStone(Position position) {
     super(position);
   }
 }

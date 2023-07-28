@@ -9,5 +9,9 @@
         "editor.detectIndentation": false
     },
     "java.format.comments.enabled": false,
+<<<<<<< HEAD
     "java.compile.nullAnalysis.mode": "disabled",
+=======
+    "java.compile.nullAnalysis.mode": "automatic",
+>>>>>>> master
 }

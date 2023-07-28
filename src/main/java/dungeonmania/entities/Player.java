@@ -6,23 +6,24 @@ import java.util.Queue;
 
 import dungeonmania.battles.BattleStatistics;
 import dungeonmania.battles.Battleable;
+import dungeonmania.entities.buildables.Sceptre;
 import dungeonmania.entities.collectables.Bomb;
-import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.collectables.TreasureItem;
 import dungeonmania.entities.collectables.potions.Potion;
 import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.entities.enemies.Mercenary;
 import dungeonmania.entities.inventory.Inventory;
 import dungeonmania.entities.inventory.InventoryItem;
+import dungeonmania.entities.movementListeners.ActionOnOverlap;
 import dungeonmania.entities.playerState.BaseState;
 import dungeonmania.entities.playerState.InvincibleState;
 import dungeonmania.entities.playerState.InvisibleState;
 import dungeonmania.entities.playerState.PlayerState;
 import dungeonmania.map.GameMap;
-import dungeonmania.movementListeners.CanOverlap;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-public class Player extends Entity implements Battleable, CanOverlap {
+public class Player extends Entity implements Battleable, ActionOnOverlap {
   public static final double DEFAULT_ATTACK = 5.0;
   public static final double DEFAULT_HEALTH = 5.0;
   private BattleStatistics battleStatistics;
@@ -39,13 +40,13 @@ public class Player extends Entity implements Battleable, CanOverlap {
   private PlayerState baseState;
   private PlayerState state;
 
+  // Represents the current state of the GameMap after player has moved.
+  // Null if player has not moved yet.
+  private GameMap currMap = null;
+
   public Player(Position position, double health, double attack) {
     super(position);
-    battleStatistics = new BattleStatistics(
-        health,
-        attack,
-        0,
-        BattleStatistics.DEFAULT_DAMAGE_MAGNIFIER,
+    battleStatistics = new BattleStatistics(health, attack, 0, BattleStatistics.DEFAULT_DAMAGE_MAGNIFIER,
         BattleStatistics.DEFAULT_PLAYER_DAMAGE_REDUCER);
     inventory = new Inventory();
 
@@ -75,13 +76,13 @@ public class Player extends Entity implements Battleable, CanOverlap {
     return collectedTreasureCount;
   }
 
-    public int getSlainEnemyCount() {
-        return slainEnemyCount;
-    }
+  public int getSlainEnemyCount() {
+    return slainEnemyCount;
+  }
 
-    public void incrementSlainEnemyCount() {
-        slainEnemyCount++;
-    }
+  public void incrementSlainEnemyCount() {
+    slainEnemyCount++;
+  }
 
   public boolean hasWeapon() {
     return inventory.hasWeapon();
@@ -92,11 +93,11 @@ public class Player extends Entity implements Battleable, CanOverlap {
   }
 
   public List<String> getBuildables() {
-    return inventory.getBuildables();
+    return inventory.getBuildables(getCurrMap());
   }
 
   public boolean build(String entity, EntityFactory factory) {
-    InventoryItem item = inventory.checkBuildCriteria(entity, factory);
+    InventoryItem item = inventory.checkBuildCriteria(getCurrMap(), entity, factory);
     if (item == null)
       return false;
     return inventory.add(item);
@@ -105,14 +106,17 @@ public class Player extends Entity implements Battleable, CanOverlap {
   public void move(GameMap map, Direction direction) {
     this.setFacing(direction);
     map.moveTo(this, Position.translateBy(this.getPosition(), direction));
+    // Map has been updated after movement.
+    this.setCurrMap(map);
   }
 
   @Override
   public void onOverlap(GameMap map, Entity entity) {
     if (entity instanceof Enemy) {
       if (entity instanceof Mercenary) {
-        if (((Mercenary) entity).isAllied())
+        if (((Mercenary) entity).alliedOrMindControl()) {
           return;
+        }
       }
       map.getGame().battle(this, (Enemy) entity);
     }
@@ -128,7 +132,7 @@ public class Player extends Entity implements Battleable, CanOverlap {
   }
 
   public boolean pickUp(Entity item) {
-    if (item instanceof Treasure)
+    if (item instanceof TreasureItem)
       collectedTreasureCount++;
 
     if (item instanceof InventoryItem) {
@@ -197,4 +201,24 @@ public class Player extends Entity implements Battleable, CanOverlap {
   public BattleStatistics applyBuff(BattleStatistics origin) {
     return state.applyBuff(origin);
   }
+
+  private GameMap getCurrMap() {
+    return currMap;
+  }
+
+  private void setCurrMap(GameMap currMap) {
+    this.currMap = currMap;
+  }
+
+  /**
+   * @pre hasItem(Sceptre) returned true
+   */
+  public int getMindControlDuration() {
+    return inventory.getFirst(Sceptre.class).getDuration();
+  }
+
+  public <T extends InventoryItem> boolean hasItem(Class<T> itemType) {
+    return !inventory.getEntities(itemType).isEmpty();
+  }
+
 }
