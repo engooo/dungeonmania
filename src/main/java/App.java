@@ -106,14 +106,13 @@ public class App implements SparkApplication {
                     (dmc) -> dmc.newGame(request.queryParams("dungeonName"), request.queryParams("configName")));
         }, gson::toJson);
 
-        Spark.post("/api/game/new/generate", "application/json", (request, response) -> {
+        Spark.post("/api/game/new/generate/", "application/json", (request, response) -> {
             return callUsingSessionAndArgument(request,
-                    (dmc) -> dmc.generateDungeon(Integer.parseInt(request.queryParams(("xStart"))),
-                    Integer.parseInt(request.queryParams("yStart")),
-                    Integer.parseInt(request.queryParams("xEnd")),
-                    Integer.parseInt(request.queryParams("yEnd")),
-                    request.queryParams("configName")));
-        });
+                    (dmc) -> dmc.generateDungeon(Integer.parseInt(request.queryParams("xStart")),
+                            Integer.parseInt(request.queryParams("yStart")),
+                            Integer.parseInt(request.queryParams("xEnd")),
+                            Integer.parseInt(request.queryParams("yEnd")), request.queryParams("configName")));
+        }, gson::toJson);
 
         Spark.post("/api/game/tick/item/", "application/json", (request, response) -> {
             return callUsingSessionAndArgument(request, (dmc) -> {

@@ -140,7 +140,7 @@ export const API = {
   newDungeon: (xStart: string, yStart: string, xEnd: string, yEnd: string, configName: string): Promise<Dungeon | null> =>
     evaluateResponse(
       axios.post(
-        URL + "/api/game/new/generate",
+        URL + "/api/game/new/generate/",
         {},
         {
           params: {
@@ -152,7 +152,7 @@ export const API = {
           },
         }
       ),
-      "Error POST /game/new: DungeonManiaController::ctor(...)",
+      "Error POST /game/new/generate/: DungeonManiaController::ctor(...)",
       null
     ),
   interact: async (entityId: string): Promise<Dungeon | null> => {

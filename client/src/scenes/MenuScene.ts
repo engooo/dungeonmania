@@ -297,7 +297,7 @@ class MenuScene extends Scene {
           let dungeon: Dungeon;
   
           const result = await Swal.fire({
-            title: "Create New Dungeon",
+            title: window.Config.localisation.main_menu.buttons.new_dungeon,
             heightAuto: false,
             html: `      
             <label for="xStart" class="f6 b db mb2 mt3">xStart</label>
@@ -360,7 +360,7 @@ class MenuScene extends Scene {
                 return values;
               };
               let results = [
-                (document.getElementById("yStart") as HTMLInputElement).value,
+                (document.getElementById("xStart") as HTMLInputElement).value,
                 (document.getElementById("yStart") as HTMLInputElement).value,
                 (document.getElementById("xEnd") as HTMLInputElement).value,
                 (document.getElementById("yEnd") as HTMLInputElement).value,
