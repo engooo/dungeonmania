@@ -281,25 +281,25 @@ class MenuScene extends Scene {
       this,
       10,
       this.renderer.height / 4 +
-        this.newGame.height +
-        this.credits.height +
-        this.exitGame.height +
-        40 +
-        20 +
-        75,
-        window.Config.localisation.main_menu.buttons.new_dungeon,
-        {
-          fontSize: "25px",
-          fontFamily: "main_menu-font",
-        },
-        async () => {
-          const configs = await API.getConfigs();
-          let dungeon: Dungeon;
-  
-          const result = await Swal.fire({
-            title: window.Config.localisation.main_menu.buttons.new_dungeon,
-            heightAuto: false,
-            html: `      
+      this.newGame.height +
+      this.credits.height +
+      this.exitGame.height +
+      40 +
+      20 +
+      75,
+      window.Config.localisation.main_menu.buttons.new_dungeon,
+      {
+        fontSize: "25px",
+        fontFamily: "main_menu-font",
+      },
+      async () => {
+        const configs = await API.getConfigs();
+        let dungeon: Dungeon;
+
+        const result = await Swal.fire({
+          title: window.Config.localisation.main_menu.buttons.new_dungeon,
+          heightAuto: false,
+          html: `      
             <label for="xStart" class="f6 b db mb2 mt3">xStart</label>
                 <select id="xStart" class="swal2-input">
                   ${generateOptions(-50, 50)}
@@ -331,63 +331,63 @@ class MenuScene extends Scene {
                 </datalist>
             </select>
             `,
-            focusConfirm: false,
-            showCancelButton: true,
-            showLoaderOnConfirm: true,
-            allowOutsideClick: () => !Swal.isLoading(),
-            preConfirm: async () => {
-              let inputValidator = async (values) => {
-                if (!values || !values[0]) {
-                  Swal.showValidationMessage("You need to select a xStart");
-                  return false;
-                }
-                if (!values || !values[1]) {
-                  Swal.showValidationMessage("You need to select a yStart");
-                  return false;
-                }
-                if (!values || !values[2]) {
-                  Swal.showValidationMessage("You need to select a xEnd");
-                  return false;
-                }
-                if (!values || !values[3]) {
-                  Swal.showValidationMessage("You need to select a yEnd");
-                  return false;
-                }
-                if (!values || !values[4]) {
-                  Swal.showValidationMessage("You need to select a config file");
-                  return false;
-                }
-                return values;
-              };
-              let results = [
-                (document.getElementById("xStart") as HTMLInputElement).value,
-                (document.getElementById("yStart") as HTMLInputElement).value,
-                (document.getElementById("xEnd") as HTMLInputElement).value,
-                (document.getElementById("yEnd") as HTMLInputElement).value,
-                (document.getElementById("config") as HTMLInputElement).value,
-              ];
-              if (await inputValidator(results)) {
-                dungeon = await API.newDungeon(results[0], results[1], results[2], results[3], results[4]);
-                return !!dungeon;
+          focusConfirm: false,
+          showCancelButton: true,
+          showLoaderOnConfirm: true,
+          allowOutsideClick: () => !Swal.isLoading(),
+          preConfirm: async () => {
+            let inputValidator = async (values) => {
+              if (!values || !values[0]) {
+                Swal.showValidationMessage("You need to select a xStart");
+                return false;
               }
-            },
-          });
-  
-          if (result.isConfirmed) {
-            // For debugging we won't do the *smart* thing here which is just
-            // to invoke a load event on the game scene. Instead we'll store the dungeon
-            // in our window frame and then load the next scene to read from it.
-            window.Dungeon = dungeon;
-            this.scene.start("scene-game");
-          }
+              if (!values || !values[1]) {
+                Swal.showValidationMessage("You need to select a yStart");
+                return false;
+              }
+              if (!values || !values[2]) {
+                Swal.showValidationMessage("You need to select a xEnd");
+                return false;
+              }
+              if (!values || !values[3]) {
+                Swal.showValidationMessage("You need to select a yEnd");
+                return false;
+              }
+              if (!values || !values[4]) {
+                Swal.showValidationMessage("You need to select a config file");
+                return false;
+              }
+              return values;
+            };
+            let results = [
+              (document.getElementById("xStart") as HTMLInputElement).value,
+              (document.getElementById("yStart") as HTMLInputElement).value,
+              (document.getElementById("xEnd") as HTMLInputElement).value,
+              (document.getElementById("yEnd") as HTMLInputElement).value,
+              (document.getElementById("config") as HTMLInputElement).value,
+            ];
+            if (await inputValidator(results)) {
+              dungeon = await API.newDungeon(results[0], results[1], results[2], results[3], results[4]);
+              return !!dungeon;
+            }
+          },
+        });
+
+        if (result.isConfirmed) {
+          // For debugging we won't do the *smart* thing here which is just
+          // to invoke a load event on the game scene. Instead we'll store the dungeon
+          // in our window frame and then load the next scene to read from it.
+          window.Dungeon = dungeon;
+          this.scene.start("scene-game");
         }
-    
+      }
+
     );
 
     this.add.existing(this.newDungeon);
     this.newDungeon.setX(-this.newDungeon.width);
 
-    
+
     function generateOptions(min: number, max: number): string {
       let options = '';
       for (let i = min; i <= max; i++) {

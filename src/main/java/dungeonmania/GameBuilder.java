@@ -2,6 +2,7 @@ package dungeonmania;
 
 import java.io.IOException;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dungeonmania.entities.Entity;
@@ -13,6 +14,8 @@ import dungeonmania.map.GameMap;
 import dungeonmania.map.GraphNode;
 import dungeonmania.map.GraphNodeFactory;
 import dungeonmania.util.FileLoader;
+import dungeonmania.util.Position;
+import dungeonmania.util.PrimsRandomDungeon;
 
 /**
  * GameBuilder -- A builder to build up the whole game
@@ -64,12 +67,7 @@ public class GameBuilder {
   }
 
   private void loadDungeon() {
-    String folder;
-    if (dungeonName.startsWith("random_")) {
-      folder = "dungeons_random";
-    } else
-      folder = "dungeons";
-    String dungeonFile = String.format("/%s/%s.json", folder, dungeonName);
+    String dungeonFile = String.format("/dungeons/%s.json", dungeonName);
     try {
       dungeon = new JSONObject(FileLoader.loadResourceFile(dungeonFile));
     } catch (IOException e) {
@@ -86,8 +84,9 @@ public class GameBuilder {
       GraphNode newNode = GraphNodeFactory.createEntity(jsonEntity, game.getEntityFactory());
       Entity entity = newNode.getEntities().get(0);
 
-      if (newNode != null)
+      if (newNode != null) {
         map.addNode(newNode);
+      }
 
       if (entity instanceof Player)
         map.setPlayer((Player) entity);
@@ -101,4 +100,60 @@ public class GameBuilder {
       game.setGoals(goal);
     }
   }
+
+  public void generateDungeon(int height, int width, Position start, Position end) throws IllegalArgumentException {
+
+    PrimsRandomDungeon randomGen = new PrimsRandomDungeon(width, height, start, end);
+    boolean[][] dungeon = randomGen.generateNewDungeon();
+    JSONObject jsonDungeon = generateDungeonJSON(dungeon, height, width, start, end);
+    this.dungeon = jsonDungeon;
+  }
+
+  private JSONObject generateDungeonJSON(boolean[][] map, int height, int width, Position start, Position end) {
+
+    JSONObject dungeon = new JSONObject();
+    JSONArray entities = new JSONArray();
+
+    entities.put(jsonEntity("player", start.getX(), start.getY()));
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        if (!map[x][y]) {
+          entities.put(jsonEntity("wall", x, y));
+        }
+      }
+    }
+
+    dungeon.put("entities", entities);
+    dungeon.put("goal-condition", "exit");
+
+    return dungeon;
+  }
+
+  private static JSONObject jsonEntity(String type, int x, int y) {
+    JSONObject obj = new JSONObject();
+    obj.put("type", type);
+    obj.put("x", x);
+    obj.put("y", y);
+
+    return obj;
+  }
+
+  public Game buildGameRandom(int height, int width, Position start, Position end) {
+    loadConfig();
+    generateDungeon(height, width, start, end);
+
+    if (dungeon == null && config == null) {
+      return null; // something went wrong
+    }
+
+    Game game = new Game(dungeonName);
+    EntityFactory factory = new EntityFactory(config);
+    game.setEntityFactory(factory);
+    buildMap(game);
+    buildGoals(game);
+    game.init();
+
+    return game;
+  }
+
 }
