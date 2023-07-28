@@ -6,6 +6,9 @@ import java.util.Random;
 import java.util.Set;
 
 public class PrimsRandomDungeon {
+  private static final boolean WALL = false;
+  private static final boolean EMPTY = true;
+
   private int width;
   private int height;
   private Position start;
@@ -30,7 +33,7 @@ public class PrimsRandomDungeon {
     // False represents walls, true represents empty spaces
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
-        maze[y][x] = false;
+        maze[y][x] = WALL;
       }
     }
   }
@@ -52,9 +55,33 @@ public class PrimsRandomDungeon {
     return option;
   }
 
+  private boolean validCoord(int x, int y) {
+    return x >= 0 && x < width && y >= 0 && y < height;
+  }
+
+  private Set<Position> getCardinallyAdjacentWalls(Position pos) {
+    Set<Position> positions = new HashSet<>();
+    for (Position p : pos.getCardinallyAdjacentPositions()) {
+      int x = p.getX();
+      int y = p.getY();
+      if (maze[x][y] == WALL && validCoord(x, y)) {
+        positions.add(p);
+      }
+    }
+    return positions;
+  }
+
   private Set<Position> getNeighboursOf(Position pos) {
     Set<Position> neighbours = new HashSet<>();
-    // TODO ew
+    Set<Position> oneAway = new HashSet<>(getCardinallyAdjacentWalls(pos));
+
+    for (Position p : oneAway) {
+      neighbours.addAll(getCardinallyAdjacentWalls(p));
+    }
+    for (Position p : oneAway) {
+      neighbours.remove(p);
+    }
+
     return neighbours;
   }
 
@@ -62,7 +89,7 @@ public class PrimsRandomDungeon {
     clearDungeon();
 
     // Set initial position to empty
-    maze[start.getX()][start.getY()] = true;
+    maze[start.getX()][start.getY()] = EMPTY;
 
     // Add to options all neighbours of 'start' not on boundary that are of distance 2 away and are walls
     optionsAdd(getNeighboursOf(start));
@@ -79,25 +106,33 @@ public class PrimsRandomDungeon {
 
         Position inBetween = new Position((next.getX() + neighbour.getX()) / 2, (next.getY() + neighbour.getY()) / 2);
         // maze[ position inbetween next and neighbour ] = empty (i.e. true)
-        maze[inBetween.getX()][inBetween.getY()] = true;
+        maze[inBetween.getX()][inBetween.getY()] = EMPTY;
         // maze[ neighbour ] = empty (i.e. true)
-        maze[neighbour.getX()][neighbour.getY()] = true;
+        maze[neighbour.getX()][neighbour.getY()] = EMPTY;
 
         optionsAdd(neighbours);
       }
+
+      // At the end there is still a case where our end position isn't connected to the map
+      // This will make it consistently have a pathway between the two.
+      if (maze[end.getY()][end.getX()] == WALL) {
+        maze[end.getY()][end.getX()] = EMPTY;
+      }
+
+      neighbours = new HashSet<>(end.getCardinallyAdjacentPositions());
+      for (Position p : neighbours) {
+        int x = p.getX();
+        int y = p.getY();
+        if (validCoord(x, y) && maze[y][x] == EMPTY) {
+          // The maze is connected to the end.
+          return maze;
+        }
+      }
+      // The maze is not connected to the end so connect it.
+      int randNum = random.nextInt(neighbours.size() - 1);
+      Position fix = neighbours.stream().skip(random.nextInt(randNum)).findFirst().get();
+      maze[fix.getY()][fix.getX()] = EMPTY;
     }
-
-    // # at the end there is still a case where our end position isn't connected to the map
-    // # we don't necessarily need this, you can just keep randomly generating maps (was original intention)
-    // # but this will make it consistently have a pathway between the two.
-    // # if maze[end] is a wall:
-    //     maze[end] = empty
-
-    //     let neighbours = neighbours not on boundary of distance 1 from maze[end]
-    //     if there are no cells in neighbours that are empty:
-    //         # let's connect it to the grid
-    //         let neighbour = random from neighbours
-    //         maze[neighbour] = empty
 
     return maze;
   }
