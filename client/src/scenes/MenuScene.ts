@@ -24,7 +24,7 @@ class MenuScene extends Scene {
     super("scene-menu");
   }
 
-  init() {}
+  init() { }
 
   preload() {
     // load required assets...
@@ -56,7 +56,7 @@ class MenuScene extends Scene {
 
   create() {
     generateSceneWideSymbols(this);
-    
+
     playBackgroundMusic(
       "main-menu-",
       this,
@@ -232,10 +232,10 @@ class MenuScene extends Scene {
       this,
       10,
       this.renderer.height / 4 +
-        this.newGame.height +
-        10 +
-        20 +
-        75,
+      this.newGame.height +
+      10 +
+      20 +
+      75,
       window.Config.localisation.main_menu.buttons.credits,
       {
         fontSize: "25px",
@@ -255,11 +255,11 @@ class MenuScene extends Scene {
       this,
       10,
       this.renderer.height / 4 +
-        this.newGame.height +
-        this.credits.height +
-        30 +
-        20 +
-        75,
+      this.newGame.height +
+      this.credits.height +
+      30 +
+      20 +
+      75,
       window.Config.localisation.main_menu.buttons.quit_game,
       {
         fontSize: "25px",
@@ -289,7 +289,7 @@ class MenuScene extends Scene {
     });
   }
 
-  update(time: number, delta: number) {}
+  update(time: number, delta: number) { }
 }
 
 export default MenuScene;

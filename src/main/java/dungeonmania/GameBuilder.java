@@ -69,7 +69,7 @@ public class GameBuilder {
       folder = "dungeons_random";
     } else
       folder = "dungeons";
-    String dungeonFile = String.format("/%sfolder/%s.json", folder, dungeonName);
+    String dungeonFile = String.format("/%s/%s.json", folder, dungeonName);
     try {
       dungeon = new JSONObject(FileLoader.loadResourceFile(dungeonFile));
     } catch (IOException e) {
