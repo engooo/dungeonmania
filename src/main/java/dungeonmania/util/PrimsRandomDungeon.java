@@ -33,7 +33,7 @@ public class PrimsRandomDungeon {
     // False represents walls, true represents empty spaces
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
-        maze[y][x] = WALL;
+        maze[x][y] = WALL;
       }
     }
   }
@@ -43,7 +43,7 @@ public class PrimsRandomDungeon {
   }
 
   private Position getRandomOption() {
-    int randNum = random.nextInt(options.size() - 1);
+    int randNum = nextRandom(options);
     Iterator<Position> iterator = options.iterator();
     Position option = null;
     for (int i = 0; iterator.hasNext(); i++) {
@@ -79,10 +79,15 @@ public class PrimsRandomDungeon {
       neighbours.addAll(getCardinallyAdjacentWalls(p));
     }
     for (Position p : oneAway) {
-      neighbours.remove(p);
+      if (neighbours.contains(p))
+        neighbours.remove(p);
     }
 
     return neighbours;
+  }
+
+  private int nextRandom(Set<?> limit) {
+    return random.nextInt(limit.size()) - 1;
   }
 
   public boolean[][] generateNewDungeon() {
@@ -99,8 +104,8 @@ public class PrimsRandomDungeon {
 
       Set<Position> neighbours = getNeighboursOf(next);
       if (!neighbours.isEmpty()) {
-        int randNum = random.nextInt(neighbours.size() - 1);
-        Position neighbour = neighbours.stream().skip(random.nextInt(randNum)).findFirst().get();
+        int randNum = nextRandom(neighbours);
+        Position neighbour = neighbours.stream().skip(randNum).findFirst().get();
         // maze[ next ] = empty (i.e. true)
         maze[next.getX()][next.getY()] = true;
 
@@ -115,23 +120,23 @@ public class PrimsRandomDungeon {
 
       // At the end there is still a case where our end position isn't connected to the map
       // This will make it consistently have a pathway between the two.
-      if (maze[end.getY()][end.getX()] == WALL) {
-        maze[end.getY()][end.getX()] = EMPTY;
+      if (maze[end.getX()][end.getY()] == WALL) {
+        maze[end.getX()][end.getY()] = EMPTY;
       }
 
       neighbours = new HashSet<>(end.getCardinallyAdjacentPositions());
       for (Position p : neighbours) {
         int x = p.getX();
         int y = p.getY();
-        if (validCoord(x, y) && maze[y][x] == EMPTY) {
+        if (validCoord(x, y) && maze[x][y] == EMPTY) {
           // The maze is connected to the end.
           return maze;
         }
       }
       // The maze is not connected to the end so connect it.
-      int randNum = random.nextInt(neighbours.size() - 1);
-      Position fix = neighbours.stream().skip(random.nextInt(randNum)).findFirst().get();
-      maze[fix.getY()][fix.getX()] = EMPTY;
+      int randNum = nextRandom(neighbours);
+      Position fix = neighbours.stream().skip(randNum).findFirst().get();
+      maze[fix.getX()][fix.getY()] = EMPTY;
     }
 
     return maze;
