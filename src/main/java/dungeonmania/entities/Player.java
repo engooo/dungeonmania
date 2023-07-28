@@ -8,6 +8,7 @@ import dungeonmania.battles.BattleStatistics;
 import dungeonmania.battles.Battleable;
 import dungeonmania.entities.buildables.Sceptre;
 import dungeonmania.entities.collectables.Bomb;
+import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.TreasureItem;
 import dungeonmania.entities.collectables.potions.Potion;
 import dungeonmania.entities.enemies.Enemy;
@@ -136,7 +137,9 @@ public class Player extends Entity implements Battleable, ActionOnOverlap {
       collectedTreasureCount++;
 
     if (item instanceof InventoryItem) {
-      return inventory.add((InventoryItem) item);
+      if (!((item instanceof Key) && inventory.count(Key.class) >= 1)) {
+        return inventory.add((InventoryItem) item);
+      }
     }
     return false;
   }

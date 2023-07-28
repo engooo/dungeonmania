@@ -9,5 +9,5 @@
         "editor.detectIndentation": false
     },
     "java.format.comments.enabled": false,
-    "java.compile.nullAnalysis.mode": "automatic",
+    "java.compile.nullAnalysis.mode": "disabled",
 }
